@@ -11,6 +11,7 @@ These are the keywords I will try to adapt into my project.
 3. Testify, GoMock: testing
 4. Swagger: api documentation
 5. PostgreSQL: database (use eleplantSQL)
+6. TablePlus: database management tool
 
 Initial Setup
 
