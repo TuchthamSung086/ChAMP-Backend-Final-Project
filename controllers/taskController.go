@@ -54,6 +54,28 @@ func TaskGet(c *gin.Context) {
 }
 
 func TaskUpdate(c *gin.Context) {
-	//
-	//initializers.DB.Save(&task)
+	// Find task with id
+	id := c.Param("id")
+	var task models.Task
+	initializers.DB.First(&task, id)
+
+	// Get data from req body
+	var body struct {
+		models.Task
+	}
+	c.Bind(&body)
+
+	// Update
+	initializers.DB.Model(&task).Updates(models.Task{
+		Title:       body.Title,
+		Description: body.Description,
+		DueDate:     body.DueDate,
+		Order:       body.Order,
+	})
+
+	// Return
+	c.JSON(200, gin.H{
+		"task": task,
+	})
+
 }
