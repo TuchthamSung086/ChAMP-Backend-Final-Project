@@ -21,5 +21,6 @@ func main() {
 	})
 	r.POST("/task", controllers.TaskCreate)
 	r.GET("/tasks", controllers.TaskGetAll)
+	r.GET("/task/:id", controllers.TaskGet)
 	r.Run() // listen and serve on localhost:PORT
 }

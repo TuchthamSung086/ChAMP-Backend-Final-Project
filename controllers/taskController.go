@@ -40,3 +40,20 @@ func TaskGetAll(c *gin.Context) {
 	})
 
 }
+
+func TaskGet(c *gin.Context) {
+	// Find task with id
+	id := c.Param("id")
+	var task models.Task
+	initializers.DB.First(&task, id)
+	// Return
+	c.JSON(200, gin.H{
+		"task": task,
+	})
+
+}
+
+func TaskUpdate(c *gin.Context) {
+	//
+	//initializers.DB.Save(&task)
+}
