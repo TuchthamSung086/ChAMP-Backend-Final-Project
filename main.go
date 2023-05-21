@@ -23,5 +23,6 @@ func main() {
 	r.GET("/tasks", controllers.TaskGetAll)
 	r.GET("/task/:id", controllers.TaskGet)
 	r.PUT("/task/:id", controllers.TaskUpdate)
+	r.DELETE("/task/:id", controllers.TaskDelete)
 	r.Run() // listen and serve on localhost:PORT
 }

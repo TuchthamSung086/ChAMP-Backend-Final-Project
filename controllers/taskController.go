@@ -77,5 +77,27 @@ func TaskUpdate(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"task": task,
 	})
+}
 
+func TaskDelete(c *gin.Context) {
+	// Find task with id
+	id := c.Param("id")
+
+	// Delete
+	initializers.DB.Delete(&models.Task{}, id)
+
+	// Return
+	c.Status(200)
+}
+
+// Restore deleted task
+func TaskRestore(c *gin.Context) {
+	// Find task with id
+	id := c.Param("id")
+
+	// Restore
+	initializers.DB.Unscoped().Model(&models.Task{}).Where("ID", id).Update("DeletedAt", nil)
+
+	// Return
+	c.Status(200)
 }
