@@ -9,9 +9,13 @@ import (
 
 func TaskCreate(c *gin.Context) {
 	// Get data off request body
+	var body struct {
+		models.Task
+	}
+	c.Bind(&body)
 
 	// Create a Task
-	task := models.Task{Title: "TaskTitle", Description: "TaskDesc", DueDate: "NOWHAHA", Order: 69}
+	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: body.Order}
 
 	result := initializers.DB.Create(&task) // pass pointer of data to Create
 
