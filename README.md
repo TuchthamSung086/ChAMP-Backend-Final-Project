@@ -10,7 +10,7 @@ These are the keywords I will try to adapt into my project.
 2. Gorm: orm
 3. Testify, GoMock: testing
 4. Swagger: api documentation
-5. PostgreSQL: database
+5. PostgreSQL: database (use eleplantSQL)
 
 Initial Setup
 
