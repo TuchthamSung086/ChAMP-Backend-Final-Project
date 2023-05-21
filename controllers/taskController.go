@@ -28,3 +28,15 @@ func TaskCreate(c *gin.Context) {
 		"task": task,
 	})
 }
+
+func TaskGetAll(c *gin.Context) {
+	// Get all records
+	var tasks []models.Task
+	initializers.DB.Find(&tasks)
+
+	// Return
+	c.JSON(200, gin.H{
+		"tasks": tasks,
+	})
+
+}

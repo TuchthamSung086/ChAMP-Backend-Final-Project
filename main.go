@@ -14,6 +14,12 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	r.POST("/tasks", controllers.TaskCreate)
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+	r.POST("/task", controllers.TaskCreate)
+	r.GET("/tasks", controllers.TaskGetAll)
+	r.Run() // listen and serve on localhost:PORT
 }
