@@ -28,5 +28,6 @@ func main() {
 	r.POST("/list", controllers.ListCreate)
 	r.GET("/lists", controllers.ListGetAll)
 	r.GET("/list/:id", controllers.ListGet)
+	r.PUT("/list/:id", controllers.ListUpdate)
 	r.Run() // listen and serve on localhost:PORT
 }

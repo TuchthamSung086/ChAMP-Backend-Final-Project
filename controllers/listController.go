@@ -52,3 +52,27 @@ func ListGet(c *gin.Context) {
 	})
 
 }
+
+func ListUpdate(c *gin.Context) {
+	// Find task with id
+	id := c.Param("id")
+	var list models.List
+	initializers.DB.First(&list, id)
+
+	// Get data from req body
+	var body struct {
+		models.List
+	}
+	c.Bind(&body)
+
+	// Update
+	initializers.DB.Model(&list).Updates(models.List{
+		Title: body.Title,
+		Order: body.Order,
+	})
+
+	// Return
+	c.JSON(200, gin.H{
+		"list": list,
+	})
+}
