@@ -24,5 +24,9 @@ func main() {
 	r.GET("/task/:id", controllers.TaskGet)
 	r.PUT("/task/:id", controllers.TaskUpdate)
 	r.DELETE("/task/:id", controllers.TaskDelete)
+
+	r.POST("/list", controllers.ListCreate)
+	r.GET("/lists", controllers.ListGetAll)
+	r.GET("/list/:id", controllers.ListGet)
 	r.Run() // listen and serve on localhost:PORT
 }
