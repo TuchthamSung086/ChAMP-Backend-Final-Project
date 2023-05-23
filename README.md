@@ -25,3 +25,4 @@ Initial Setup
 Terminal Commands
 
 1. `CompileDaemon -command="./ChAMP-Backend-Final-Project"` to make CompileDaemon report to terminal in realtime
+2. `go build .\migrate\; go run .\migrate\` to migrate (update table schema) of our model files to the database

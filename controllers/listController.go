@@ -5,6 +5,7 @@ import (
 	"ChAMP-Backend-Final-Project/models"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm/clause"
 )
 
 func ListCreate(c *gin.Context) {
@@ -33,7 +34,7 @@ func ListCreate(c *gin.Context) {
 func ListGetAll(c *gin.Context) {
 	// Get all records
 	var lists []models.List
-	initializers.DB.Find(&lists)
+	initializers.DB.Preload(clause.Associations).Find(&lists)
 
 	// Return
 	c.JSON(200, gin.H{
@@ -83,6 +84,14 @@ func ListDelete(c *gin.Context) {
 
 	// Delete
 	initializers.DB.Delete(&models.List{}, id)
+
+	// Return
+	c.Status(200)
+}
+
+func ListDeleteAll(c *gin.Context) {
+	// Delete
+	initializers.DB.Unscoped().Delete(&models.List{})
 
 	// Return
 	c.Status(200)

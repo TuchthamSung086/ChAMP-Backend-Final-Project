@@ -1,6 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 /*
 - Description (optional)
@@ -9,9 +13,11 @@ import "gorm.io/gorm"
 */
 
 type Task struct {
-	gorm.Model         // https://gorm.io/docs/models.html
-	Title       string `gorm:"not null;"`
-	Description string
-	DueDate     string
-	Order       int `gorm:"not null;"`
+	ID          uint `gorm:"primaryKey;autoIncrement;"`
+	gorm.Model       // https://gorm.io/docs/models.html
+	ListID      uint
+	Title       string    `gorm:"not null;"`
+	Description string    `gorm:"size:255"`
+	DueDate     time.Time `gorm:"default:CURRENT_TIMESTAMP"`
+	Order       int       `gorm:"not null;"`
 }

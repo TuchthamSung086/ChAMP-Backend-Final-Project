@@ -3,11 +3,21 @@ package controllers
 import (
 	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/models"
+	"fmt"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func TaskCreate(c *gin.Context) {
+	// Get List ID
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		fmt.Println("Error:", err)
+		c.JSON(400, gin.H{"msg": err})
+		return
+	}
+
 	// Get data off request body
 	var body struct {
 		models.Task
@@ -15,17 +25,19 @@ func TaskCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	// Create a Task
-	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: body.Order}
+	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: body.Order, ListID: uint(id)}
 
 	result := initializers.DB.Create(&task) // pass pointer of data to Create
 
 	if result.Error != nil {
-		c.Status(400)
+		//c.Status(400)
+		c.JSON(400, gin.H{"msg": result.Error})
 		return
 	}
 	// Return
 	c.JSON(200, gin.H{
-		"task": task,
+		"task":          task,
+		"rows affected": result.RowsAffected,
 	})
 }
 
@@ -38,7 +50,6 @@ func TaskGetAll(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"tasks": tasks,
 	})
-
 }
 
 func TaskGet(c *gin.Context) {
@@ -97,6 +108,22 @@ func TaskRestore(c *gin.Context) {
 
 	// Restore
 	initializers.DB.Unscoped().Model(&models.Task{}).Where("ID", id).Update("DeletedAt", nil)
+
+	// Return
+	c.Status(200)
+}
+
+func TaskDeleteAll(c *gin.Context) {
+
+	// Delete all records from the "tasks" table
+	result := initializers.DB.Unscoped().Delete(&models.Task{})
+	if result.Error != nil {
+		fmt.Println("Failed to delete records:", result.Error)
+		return
+	}
+
+	// Print the number of deleted records
+	fmt.Println("Number of deleted records:", result.RowsAffected)
 
 	// Return
 	c.Status(200)
