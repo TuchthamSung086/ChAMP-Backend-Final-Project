@@ -76,3 +76,14 @@ func ListUpdate(c *gin.Context) {
 		"list": list,
 	})
 }
+
+func ListDelete(c *gin.Context) {
+	// Find task with id
+	id := c.Param("id")
+
+	// Delete
+	initializers.DB.Delete(&models.List{}, id)
+
+	// Return
+	c.Status(200)
+}
