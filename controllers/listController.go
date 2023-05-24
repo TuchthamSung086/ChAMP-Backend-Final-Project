@@ -39,17 +39,14 @@ func ListCreate(c *gin.Context) {
 	})
 }
 
-// @BasePath /api/v1
-
-// PingExample godoc
-// @Summary ping example
+// @Summary Get All Lists in database
 // @Schemes
-// @Description do ping
-// @Tags example
+// @Description Get All Lists in database
+// @Tags List
 // @Accept json
 // @Produce json
-// @Success 200 {string} Helloworld
-// @Router /example/helloworld [get]
+// @Success 200 {object} models.SwaggerList
+// @Router /lists [get]
 func ListGetAll(c *gin.Context) {
 	// Get all records
 	var lists []models.List

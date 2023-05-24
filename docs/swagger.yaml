@@ -1,19 +1,75 @@
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.List:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      order:
+        type: integer
+      tasks:
+        items:
+          $ref: '#/definitions/models.Task'
+        type: array
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.SwaggerList:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.List'
+        type: array
+    type: object
+  models.Task:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      dueDate:
+        type: string
+      id:
+        type: integer
+      listID:
+        type: integer
+      order:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
-  /example/helloworld:
+  /lists:
     get:
       consumes:
       - application/json
-      description: do ping
+      description: Get All Lists in database
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: string
-      summary: ping example
+            $ref: '#/definitions/models.SwaggerList'
+      summary: Get All Lists in database
       tags:
-      - example
+      - List
 swagger: "2.0"

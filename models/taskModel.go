@@ -13,8 +13,7 @@ import (
 */
 
 type Task struct {
-	ID          uint `gorm:"primaryKey;autoIncrement;"`
-	gorm.Model       // https://gorm.io/docs/models.html
+	gorm.Model  // https://gorm.io/docs/models.html
 	ListID      uint
 	Title       string    `gorm:"not null;"`
 	Description string    `gorm:"size:255"`

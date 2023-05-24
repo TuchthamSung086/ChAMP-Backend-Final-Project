@@ -9,7 +9,7 @@ I plan to use Golang, which I have zero experience with.
 1. Gin: rest api
 2. Gorm: orm
 3. Testify, GoMock: testing
-4. Swagger: api documentation
+4. Swagger: api documentation https://github.com/swaggo/swag/blob/master/README.md#declarative-comments-format
 5. PostgreSQL: database (use eleplantSQL)
 6. TablePlus: database management tool
 
@@ -22,6 +22,14 @@ I plan to use Golang, which I have zero experience with.
 5. `go get -u gorm.io/gorm` our ORM
 6. `go get -u gorm.io/driver/postgres` our DB
 7. `go get github.com/stretchr/testify` our tester
+8.
+
+```
+go get -u github.com/swaggo/swag
+go get -u github.com/swaggo/gin-swagger
+go get -u github.com/swaggo/gin-swagger/swaggerFiles
+go install github.com/swaggo/swag/cmd/swag
+```
 
 ### Terminal Commands
 
@@ -39,6 +47,7 @@ I plan to use Golang, which I have zero experience with.
    To test on Postman, use this format `"DueDate":"2023-10-30T17:00:00.000Z"`
 3. The attribute name "Order" messes up everything related to SQL command line. Must cover with "" or ''
    For example, `"order" desc`
+4. Use this for swagger `swag init --parseDependency --parseInternal`
 
 ### Design
 
