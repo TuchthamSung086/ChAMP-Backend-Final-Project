@@ -21,6 +21,7 @@ I plan to use Golang, which I have zero experience with.
 4. `go get github.com/joho/godotenv` for easy env
 5. `go get -u gorm.io/gorm` our ORM
 6. `go get -u gorm.io/driver/postgres` our DB
+7. `go get github.com/stretchr/testify` our tester
 
 ### Terminal Commands
 

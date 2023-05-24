@@ -6,6 +6,7 @@ import (
 	"ChAMP-Backend-Final-Project/models"
 	"ChAMP-Backend-Final-Project/utils"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -16,7 +17,10 @@ func TaskCreate(c *gin.Context) {
 	var body struct {
 		models.Task
 	}
-	c.Bind(&body)
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Create a Task
 	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: utils.GetLatestTaskOrder(int(body.ListID)) + 1, ListID: body.ListID}
@@ -29,7 +33,7 @@ func TaskCreate(c *gin.Context) {
 		return
 	}
 	// Return
-	c.JSON(200, gin.H{
+	c.JSON(201, gin.H{
 		"task":          task,
 		"rows affected": result.RowsAffected,
 	})
@@ -68,7 +72,10 @@ func TaskUpdate(c *gin.Context) {
 	var body struct {
 		models.Task
 	}
-	c.Bind(&body)
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Update if change list
 	if body.ListID != 0 && task.ListID != body.ListID {

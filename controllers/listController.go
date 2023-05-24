@@ -5,6 +5,7 @@ import (
 	"ChAMP-Backend-Final-Project/logic"
 	"ChAMP-Backend-Final-Project/models"
 	"ChAMP-Backend-Final-Project/utils"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -16,7 +17,11 @@ func ListCreate(c *gin.Context) {
 	var body struct {
 		models.Task
 	}
-	c.Bind(&body)
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Create a Task
 	list := models.List{Title: body.Title, Order: utils.GetLatestListOrder() + 1}
@@ -29,7 +34,7 @@ func ListCreate(c *gin.Context) {
 	}
 
 	// Return
-	c.JSON(200, gin.H{
+	c.JSON(201, gin.H{
 		"list": list,
 	})
 }
@@ -67,7 +72,10 @@ func ListUpdate(c *gin.Context) {
 	var body struct {
 		models.List
 	}
-	c.Bind(&body)
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Fix range
 	if body.Order < 0 {
