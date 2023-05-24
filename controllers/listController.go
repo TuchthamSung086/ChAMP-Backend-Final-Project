@@ -52,7 +52,7 @@ func ListGet(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
 	var list models.List
-	initializers.DB.First(&list, id)
+	initializers.DB.Preload(clause.Associations).First(&list, id)
 	// Return
 	c.JSON(200, gin.H{
 		"list": list,

@@ -19,5 +19,5 @@ type Task struct {
 	Title       string    `gorm:"not null;"`
 	Description string    `gorm:"size:255"`
 	DueDate     time.Time `gorm:"default:CURRENT_TIMESTAMP"`
-	Order       int       `gorm:"not null;"`
+	Order       int       `gorm:"not null;index:,sort:asc,type:btree"`
 }
