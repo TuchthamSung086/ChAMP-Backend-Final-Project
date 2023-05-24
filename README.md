@@ -36,6 +36,8 @@ I plan to use Golang, which I have zero experience with.
    logger.Info: Error, warning, and informational messages are logged.
 2. Use UNIX time or ISO 8601 time as the standard.
    To test on Postman, use this format `"DueDate":"2023-10-30T17:00:00.000Z"`
+3. The attribute name "Order" messes up everything related to SQL command line. Must cover with "" or ''
+   For example, `"order" desc`
 
 ### Design
 

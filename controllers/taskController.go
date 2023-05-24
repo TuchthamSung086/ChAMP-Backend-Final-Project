@@ -26,7 +26,7 @@ func TaskCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	// Create a Task
-	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: utils.GetLatestTaskOrder() + 1, ListID: uint(id)}
+	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: utils.GetLatestTaskOrder(int(id)) + 1, ListID: uint(id)}
 
 	result := initializers.DB.Create(&task) // pass pointer of data to Create
 

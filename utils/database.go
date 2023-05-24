@@ -11,8 +11,8 @@ func GetLatestListOrder() int {
 	return res.Order
 }
 
-func GetLatestTaskOrder() int {
+func GetLatestTaskOrder(listID int) int {
 	var res models.Task
-	initializers.DB.Model(&models.Task{}).Order(`"order" desc`).Limit(1).Find(&res)
+	initializers.DB.Model(&models.Task{}).Where("list_id = ?", listID).Order(`"order" desc`).Limit(1).Find(&res)
 	return res.Order
 }
