@@ -3,16 +3,11 @@ package controllers
 import (
 	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/models"
+	"ChAMP-Backend-Final-Project/utils"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm/clause"
 )
-
-func getLatestListOrder() int {
-	var res models.List
-	initializers.DB.Model(&models.List{}).Order(`"order" desc`).Limit(1).Find(&res)
-	return res.Order
-}
 
 func ListCreate(c *gin.Context) {
 	// Get data off request body
@@ -22,7 +17,7 @@ func ListCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	// Create a Task
-	list := models.List{Title: body.Title, Order: getLatestListOrder() + 1}
+	list := models.List{Title: body.Title, Order: utils.GetLatestListOrder() + 1}
 
 	result := initializers.DB.Create(&list) // pass pointer of data to Create
 

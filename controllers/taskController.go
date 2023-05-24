@@ -3,17 +3,12 @@ package controllers
 import (
 	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/models"
+	"ChAMP-Backend-Final-Project/utils"
 	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
-
-func getLatestTaskOrder() int {
-	var res models.Task
-	initializers.DB.Model(&models.Task{}).Order(`"order" desc`).Limit(1).Find(&res)
-	return res.Order
-}
 
 func TaskCreate(c *gin.Context) {
 	// Get List ID
@@ -31,7 +26,7 @@ func TaskCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	// Create a Task
-	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: getLatestTaskOrder() + 1, ListID: uint(id)}
+	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: utils.GetLatestTaskOrder() + 1, ListID: uint(id)}
 
 	result := initializers.DB.Create(&task) // pass pointer of data to Create
 
