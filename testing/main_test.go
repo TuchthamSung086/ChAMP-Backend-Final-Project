@@ -52,10 +52,14 @@ func TestPostAPI(t *testing.T) {
 	list := models.List{
 		Title: "TestTitle",
 	}
-	jsonValue, _ := json.Marshal(gin.H{"title": list.Title})
+	jsonValue, _ := json.Marshal(list)
 	req, _ := http.NewRequest("POST", "/list", bytes.NewBuffer(jsonValue))
 
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	//assert.Equal(t, http.StatusCreated, w.Code)
 }
+
+// func ShouldExist(t *testing.T) {
+// 	TestGetAPI(t * testing.T)
+// }
