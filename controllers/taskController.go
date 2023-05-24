@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func TaskCreate(c *gin.Context) {
@@ -100,6 +101,11 @@ func TaskUpdate(c *gin.Context) {
 func TaskDelete(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
+	var task models.Task
+	initializers.DB.First(&task, id)
+
+	// Decrease order of tasks after this task
+	initializers.DB.Model(&models.Task{}).Where(`list_id = ? AND "order" BETWEEN ? AND ?`, task.ListID, task.Order+1, utils.GetLatestTaskOrder(int(task.ListID))).Update(`"order"`, gorm.Expr(`"order" - 1`))
 
 	// Delete
 	initializers.DB.Delete(&models.Task{}, id)

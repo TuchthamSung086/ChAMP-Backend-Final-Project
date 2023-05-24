@@ -7,6 +7,7 @@ import (
 	"ChAMP-Backend-Final-Project/utils"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
@@ -92,9 +93,14 @@ func ListUpdate(c *gin.Context) {
 func ListDelete(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
+	var list models.List
+	initializers.DB.First(&list, id)
 
 	// Delete all the tasks in it
 	initializers.DB.Delete(&models.Task{}, "list_id = ?", id)
+
+	// Decrease order of tasks after this task
+	initializers.DB.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, list.Order+1, utils.GetLatestListOrder()).Update(`"order"`, gorm.Expr(`"order" - 1`))
 
 	// Delete the list
 	initializers.DB.Delete(&models.List{}, id)
