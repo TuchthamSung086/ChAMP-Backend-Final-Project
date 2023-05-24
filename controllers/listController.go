@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ChAMP-Backend-Final-Project/initializers"
+	"ChAMP-Backend-Final-Project/logic"
 	"ChAMP-Backend-Final-Project/models"
 	"ChAMP-Backend-Final-Project/utils"
 
@@ -67,10 +68,19 @@ func ListUpdate(c *gin.Context) {
 	}
 	c.Bind(&body)
 
-	// Update
+	// Fix range
+	if body.Order < 0 {
+		body.Order = 1
+	} else if x := utils.GetLatestListOrder(); body.Order > x {
+		body.Order = x
+	}
+
+	// Update if change order
+	logic.ListReorder(list, body.Order)
+
+	// Update basic info
 	initializers.DB.Model(&list).Updates(models.List{
 		Title: body.Title,
-		Order: body.Order,
 	})
 
 	// Return
