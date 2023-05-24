@@ -34,3 +34,32 @@ Tips I learned
    logger.Error: Only error messages are logged.
    logger.Warn: Error and warning messages are logged.
    logger.Info: Error, warning, and informational messages are logged.
+
+Design
+
+- Create a task
+  Auto-set order
+
+- Update a task
+  If update order to X, update order of every task from X
+
+- Delete a task
+  If deleted order X, update order of every task after X
+
+- Create a list
+  Auto-set order
+
+- Update a list
+  If update order to X, update order of every task after X
+
+- Move a task to another list
+  Place at last order
+
+- Reorder a task in a list
+  Works like update task
+
+- Reorder a list
+  Works like update list
+
+- Delete a list, also every tasks in it
+  OnDelete CASCADE

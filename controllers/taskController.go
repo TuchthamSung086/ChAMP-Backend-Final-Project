@@ -9,6 +9,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func getLatestTaskOrder() int {
+	var res models.Task
+	initializers.DB.Model(&models.Task{}).Order(`"order" desc`).Limit(1).Find(&res)
+	return res.Order
+}
+
 func TaskCreate(c *gin.Context) {
 	// Get List ID
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
@@ -25,7 +31,7 @@ func TaskCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	// Create a Task
-	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: body.Order, ListID: uint(id)}
+	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: getLatestTaskOrder() + 1, ListID: uint(id)}
 
 	result := initializers.DB.Create(&task) // pass pointer of data to Create
 
