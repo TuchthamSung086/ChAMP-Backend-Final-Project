@@ -5,20 +5,11 @@ import (
 	"ChAMP-Backend-Final-Project/models"
 	"ChAMP-Backend-Final-Project/utils"
 	"fmt"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func TaskCreate(c *gin.Context) {
-	// Get List ID
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		fmt.Println("Error:", err)
-		c.JSON(400, gin.H{"msg": err})
-		return
-	}
-
 	// Get data off request body
 	var body struct {
 		models.Task
@@ -26,7 +17,7 @@ func TaskCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	// Create a Task
-	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: utils.GetLatestTaskOrder(int(id)) + 1, ListID: uint(id)}
+	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: utils.GetLatestTaskOrder(int(body.ListID)) + 1, ListID: body.ListID}
 
 	result := initializers.DB.Create(&task) // pass pointer of data to Create
 
@@ -82,7 +73,6 @@ func TaskUpdate(c *gin.Context) {
 		Title:       body.Title,
 		Description: body.Description,
 		DueDate:     body.DueDate,
-		Order:       body.Order,
 	})
 
 	// Return
@@ -100,6 +90,20 @@ func TaskDelete(c *gin.Context) {
 
 	// Return
 	c.Status(200)
+}
+
+func TaskChangeList(c *gin.Context) {
+	// Find task with id
+	id := c.Param("id")
+	var task models.Task
+	initializers.DB.First(&task, id)
+
+	// Get data from req body
+	var body struct {
+		models.Task
+	}
+	c.Bind(&body)
+
 }
 
 // Restore deleted task

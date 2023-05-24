@@ -19,7 +19,7 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.POST("task/:id", controllers.TaskCreate)
+	r.POST("/task", controllers.TaskCreate)
 	r.GET("/tasks", controllers.TaskGetAll)
 	r.GET("/task/:id", controllers.TaskGet)
 	r.PUT("/task/:id", controllers.TaskUpdate)
