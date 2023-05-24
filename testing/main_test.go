@@ -1,28 +1,28 @@
 package main_test
 
 import (
-	"ChAMP-Backend-Final-Project/controllers"
 	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/models"
+	"ChAMP-Backend-Final-Project/routes"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-func SetUpRouter() *gin.Engine {
-	router := gin.Default()
-	return router
-}
+var r *gin.Engine
 
 func init() {
 	initializers.LoadEnvVariables()
 	initializers.ConnectToDB()
+	r = routes.SetupRouter()
 }
 
 func TestTrue(t *testing.T) {
@@ -31,12 +31,6 @@ func TestTrue(t *testing.T) {
 
 func TestGetAPI(t *testing.T) {
 	mockResponse := `{"message":"pong"}`
-	r := SetUpRouter()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 	req, _ := http.NewRequest("GET", "/ping", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -47,8 +41,6 @@ func TestGetAPI(t *testing.T) {
 }
 
 func TestPostAPI(t *testing.T) {
-	r := SetUpRouter()
-	r.POST("/list", controllers.ListCreate)
 	list := models.List{
 		Title: "TestTitle",
 	}
@@ -60,6 +52,33 @@ func TestPostAPI(t *testing.T) {
 	//assert.Equal(t, http.StatusCreated, w.Code)
 }
 
-// func ShouldExist(t *testing.T) {
-// 	TestGetAPI(t * testing.T)
-// }
+func testAPI(t *testing.T, httpType string, path string, jsonData string) string {
+	// Declare a models.List struct with JSON data
+	var list models.List
+	var task models.Task
+	// If list
+	if strings.Contains(path, "list") {
+		err := json.Unmarshal([]byte(jsonData), &list)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return "ERROR"
+		}
+	} else if strings.Contains(path, "task") {
+		err := json.Unmarshal([]byte(jsonData), &task)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return "ERROR"
+		}
+	}
+	jsonValue, _ := json.Marshal(list)
+	req, _ := http.NewRequest(httpType, path, bytes.NewBuffer(jsonValue))
+
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	responseData, _ := ioutil.ReadAll(w.Body)
+	return string(responseData)
+}
+
+func TestPlayground(t *testing.T) {
+	testAPI(t, "POST", "/list", `{"title":"PGTitle"}`)
+}
