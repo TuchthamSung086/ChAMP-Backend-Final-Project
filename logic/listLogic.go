@@ -12,9 +12,9 @@ func listMoveToFront(list models.List, to int) {
 	A := to
 	B := list.Order
 	// +1 to all from A to B-1
-	initializers.DB.Model(&models.Task{}).Where(`"order" BETWEEN ? AND ?`, A, B-1).Update(`"order"`, gorm.Expr(`"order" + 1`))
+	initializers.DB.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, A, B-1).Update(`"order"`, gorm.Expr(`"order" + 1`))
 	// Set own order to A
-	initializers.DB.Model(&list).Updates(models.Task{Order: A})
+	initializers.DB.Model(&list).Updates(models.List{Order: A})
 }
 
 func listMoveToBack(list models.List, to int) {
@@ -22,7 +22,7 @@ func listMoveToBack(list models.List, to int) {
 	A := list.Order
 	B := to
 	// -1 to all from A+1 to B
-	initializers.DB.Model(&models.Task{}).Where(`"order" BETWEEN ? AND ?`, A+1, B).Update(`"order"`, gorm.Expr(`"order" - 1`))
+	initializers.DB.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, A+1, B).Update(`"order"`, gorm.Expr(`"order" - 1`))
 	// Set own order to B
 	initializers.DB.Model(&list).Updates(models.List{Order: B})
 }

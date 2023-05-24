@@ -1,0 +1,13 @@
+info:
+  contact: {}
+paths:
+  /lists:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of lists from the database
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a list of all lists
+swagger: "2.0"

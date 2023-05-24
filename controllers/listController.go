@@ -39,6 +39,11 @@ func ListCreate(c *gin.Context) {
 	})
 }
 
+// @Summary Get a list of all lists
+// @Description Retrieves a list of lists from the database
+// @Accept json
+// @Produce json
+// @Router /lists [get]
 func ListGetAll(c *gin.Context) {
 	// Get all records
 	var lists []models.List

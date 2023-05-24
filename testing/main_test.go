@@ -80,5 +80,8 @@ func testAPI(t *testing.T, httpType string, path string, jsonData string) string
 }
 
 func TestPlayground(t *testing.T) {
+	testAPI(t, "DELETE", "/dev/clearDB", ``) // clear DB
 	testAPI(t, "POST", "/list", `{"title":"PGTitle"}`)
+	// res := testAPI(t,"GET","/lists","")
+	// assert.Equal(t, http.StatusCreated, w.Code)
 }

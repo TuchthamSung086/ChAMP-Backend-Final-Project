@@ -1,0 +1,21 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/lists": {
+            "get": {
+                "description": "Retrieves a list of lists from the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a list of all lists",
+                "responses": {}
+            }
+        }
+    }
+}
