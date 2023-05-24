@@ -84,7 +84,7 @@ func ListDelete(c *gin.Context) {
 	id := c.Param("id")
 
 	// Delete all the tasks in it
-	initializers.DB.Delete(&models.Task{}, "ListID LIKE ?", id)
+	initializers.DB.Delete(&models.Task{}, "list_id = ?", id)
 
 	// Delete the list
 	initializers.DB.Delete(&models.List{}, id)
