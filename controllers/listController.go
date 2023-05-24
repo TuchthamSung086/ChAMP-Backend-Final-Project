@@ -12,10 +12,19 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+// @Summary Create a List
+// @Schemes
+// @Description Create a List with auto-set Order (set as last Order in database)
+// @Tags List
+// @Accept json
+// @Produce json
+// @Param list body models.List true "Title of this List"
+// @Success 200 {object} models.SwaggerList
+// @Router /list [post]
 func ListCreate(c *gin.Context) {
 	// Get data off request body
 	var body struct {
-		models.Task
+		models.List
 	}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -45,7 +54,7 @@ func ListCreate(c *gin.Context) {
 // @Tags List
 // @Accept json
 // @Produce json
-// @Success 200 {object} models.SwaggerList
+// @Success 200 {object} models.SwaggerLists
 // @Router /lists [get]
 func ListGetAll(c *gin.Context) {
 	// Get all records

@@ -15,6 +15,10 @@ type List struct {
 	Tasks      []Task `gorm:"foreignKey:ListID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
-type SwaggerList struct {
+type SwaggerLists struct {
 	List []List `json:"list"`
+}
+
+type SwaggerList struct {
+	List List `json:"list"`
 }

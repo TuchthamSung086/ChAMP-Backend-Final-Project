@@ -16,6 +16,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/list": {
+            "post": {
+                "description": "Create a List with auto-set Order (set as last Order in database)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "List"
+                ],
+                "summary": "Create a List",
+                "parameters": [
+                    {
+                        "description": "Title of this List",
+                        "name": "list",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.List"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerList"
+                        }
+                    }
+                }
+            }
+        },
         "/lists": {
             "get": {
                 "description": "Get All Lists in database",
@@ -33,7 +67,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.SwaggerList"
+                            "$ref": "#/definitions/models.SwaggerLists"
                         }
                     }
                 }
@@ -83,6 +117,14 @@ const docTemplate = `{
             }
         },
         "models.SwaggerList": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "$ref": "#/definitions/models.List"
+                }
+            }
+        },
+        "models.SwaggerLists": {
             "type": "object",
             "properties": {
                 "list": {
