@@ -4,6 +4,9 @@ import (
 	"ChAMP-Backend-Final-Project/controllers"
 
 	"github.com/gin-gonic/gin"
+
+	"ChAMP-Backend-Final-Project/docs"
+
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -32,6 +35,7 @@ func SetupRouter() *gin.Engine {
 
 	r.DELETE("/dev/clearDB", controllers.ClearDatabase)
 
+	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r

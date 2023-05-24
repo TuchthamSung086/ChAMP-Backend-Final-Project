@@ -39,11 +39,17 @@ func ListCreate(c *gin.Context) {
 	})
 }
 
-// @Summary Get a list of all lists
-// @Description Retrieves a list of lists from the database
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
 // @Accept json
 // @Produce json
-// @Router /lists [get]
+// @Success 200 {string} Helloworld
+// @Router /example/helloworld [get]
 func ListGetAll(c *gin.Context) {
 	// Get all records
 	var lists []models.List

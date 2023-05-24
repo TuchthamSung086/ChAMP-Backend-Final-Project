@@ -81,7 +81,12 @@ func testAPI(t *testing.T, httpType string, path string, jsonData string) string
 
 func TestPlayground(t *testing.T) {
 	testAPI(t, "DELETE", "/dev/clearDB", ``) // clear DB
-	testAPI(t, "POST", "/list", `{"title":"PGTitle"}`)
+	testAPI(t, "POST", "/list", `{"title":"TitlePOOH"}`)
+	type Result struct {
+		Title string
+	}
+	var result Result
+	initializers.DB.Raw("SELECT id, name, age FROM users WHERE id = ?", 3).Scan(&result)
 	// res := testAPI(t,"GET","/lists","")
 	// assert.Equal(t, http.StatusCreated, w.Code)
 }

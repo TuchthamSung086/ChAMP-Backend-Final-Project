@@ -1,13 +1,19 @@
 info:
   contact: {}
 paths:
-  /lists:
+  /example/helloworld:
     get:
       consumes:
       - application/json
-      description: Retrieves a list of lists from the database
+      description: do ping
       produces:
       - application/json
-      responses: {}
-      summary: Get a list of all lists
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: ping example
+      tags:
+      - example
 swagger: "2.0"
