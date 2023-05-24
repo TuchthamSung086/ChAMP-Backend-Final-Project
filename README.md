@@ -26,3 +26,11 @@ Terminal Commands
 
 1. `CompileDaemon -command="./ChAMP-Backend-Final-Project"` to make CompileDaemon report to terminal in realtime
 2. `go build .\migrate\; go run .\migrate\` to migrate (update table schema) of our model files to the database
+
+Tips I learned
+
+1. Please use GORM's logger and set the mode to "info" there're info, warn, error, silent.
+   logger.Silent: No logs are generated.
+   logger.Error: Only error messages are logged.
+   logger.Warn: Error and warning messages are logged.
+   logger.Info: Error, warning, and informational messages are logged.

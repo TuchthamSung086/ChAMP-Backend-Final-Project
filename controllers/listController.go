@@ -89,9 +89,10 @@ func ListDelete(c *gin.Context) {
 	c.Status(200)
 }
 
+// Hard Delete for testing
 func ListDeleteAll(c *gin.Context) {
 	// Delete
-	initializers.DB.Unscoped().Delete(&models.List{})
+	initializers.DB.Unscoped().Delete(&models.List{}, "Title LIKE ?", "%")
 
 	// Return
 	c.Status(200)

@@ -113,10 +113,11 @@ func TaskRestore(c *gin.Context) {
 	c.Status(200)
 }
 
+// Hard Delete for testing
 func TaskDeleteAll(c *gin.Context) {
 
 	// Delete all records from the "tasks" table
-	result := initializers.DB.Unscoped().Delete(&models.Task{})
+	result := initializers.DB.Unscoped().Delete(&models.Task{}, "Title LIKE ?", "%")
 	if result.Error != nil {
 		fmt.Println("Failed to delete records:", result.Error)
 		return
