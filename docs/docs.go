@@ -44,6 +44,29 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
+                            "$ref": "#/definitions/models.SwaggerInputCreate"
+                        }
+                    }
+                }
+            }
+        },
+        "/list/:id": {
+            "get": {
+                "description": "Get a list by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "List"
+                ],
+                "summary": "Get List By ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
                             "$ref": "#/definitions/models.SwaggerList"
                         }
                     }
@@ -112,6 +135,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SwaggerInputCreate": {
+            "type": "object",
+            "properties": {
+                "title": {
                     "type": "string"
                 }
             }

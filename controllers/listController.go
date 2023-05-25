@@ -19,7 +19,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param list body models.List true "Title of this List"
-// @Success 200 {object} models.SwaggerList
+// @Success 200 {object} models.SwaggerInputCreate
 // @Router /list [post]
 func ListCreate(c *gin.Context) {
 	// Get data off request body
@@ -67,6 +67,15 @@ func ListGetAll(c *gin.Context) {
 	})
 }
 
+// @Summary Get List By ID
+// @Schemes
+// @Description Get a list by id
+// @Tags List
+// @Param id path models.List true "Title of this List"
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.SwaggerList
+// @Router /list/:id [get]
 func ListGet(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
@@ -124,7 +133,7 @@ func ListDelete(c *gin.Context) {
 	// Delete all the tasks in it
 	initializers.DB.Delete(&models.Task{}, "list_id = ?", id)
 
-	// Decrease order of tasks after this task
+	// Decrease order of lists after this list
 	initializers.DB.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, list.Order+1, utils.GetLatestListOrder()).Update(`"order"`, gorm.Expr(`"order" - 1`))
 
 	// Delete the list
