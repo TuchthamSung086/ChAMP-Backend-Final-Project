@@ -50,7 +50,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/list/:id": {
+        "/list/{id}": {
             "get": {
                 "description": "Get a list by id",
                 "consumes": [
@@ -65,7 +65,7 @@ const docTemplate = `{
                 "summary": "Get List By ID",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of list to get",
                         "name": "id",
                         "in": "path",
@@ -95,7 +95,7 @@ const docTemplate = `{
                 "summary": "Update list by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of list to update",
                         "name": "id",
                         "in": "path",
@@ -133,7 +133,7 @@ const docTemplate = `{
                 "summary": "Delete list by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of list to delete",
                         "name": "id",
                         "in": "path",
@@ -188,16 +188,7 @@ const docTemplate = `{
                 "summary": "Create a Task",
                 "parameters": [
                     {
-                        "description": "ID of the list this task is going to be placed in",
-                        "name": "listID",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Title of this Task",
+                        "description": "Details of this Task",
                         "name": "task",
                         "in": "body",
                         "required": true,
@@ -216,7 +207,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/task/:id": {
+        "/task/{id}": {
             "get": {
                 "description": "Get a task by id",
                 "consumes": [
@@ -231,7 +222,7 @@ const docTemplate = `{
                 "summary": "Get Task By ID",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task to get",
                         "name": "id",
                         "in": "path",
@@ -261,7 +252,7 @@ const docTemplate = `{
                 "summary": "Update task by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task to update",
                         "name": "id",
                         "in": "path",
@@ -299,7 +290,7 @@ const docTemplate = `{
                 "summary": "Delete task by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task to delete",
                         "name": "id",
                         "in": "path",
@@ -385,10 +376,10 @@ const docTemplate = `{
         "models.SwaggerInputCreateList": {
             "type": "object",
             "properties": {
-                "order": {
+                "Order": {
                     "type": "integer"
                 },
-                "title": {
+                "Title": {
                     "type": "string"
                 }
             }
@@ -396,13 +387,13 @@ const docTemplate = `{
         "models.SwaggerInputCreateTask": {
             "type": "object",
             "properties": {
-                "description": {
+                "Description": {
                     "type": "string"
                 },
-                "list_id": {
+                "ListID": {
                     "type": "integer"
                 },
-                "title": {
+                "Title": {
                     "type": "string"
                 }
             }
@@ -410,10 +401,10 @@ const docTemplate = `{
         "models.SwaggerInputUpdateList": {
             "type": "object",
             "properties": {
-                "order": {
+                "Order": {
                     "type": "integer"
                 },
-                "title": {
+                "Title": {
                     "type": "string"
                 }
             }
@@ -421,16 +412,16 @@ const docTemplate = `{
         "models.SwaggerInputUpdateTask": {
             "type": "object",
             "properties": {
-                "description": {
+                "Description": {
                     "type": "string"
                 },
-                "list_id": {
+                "ListID": {
                     "type": "integer"
                 },
-                "order": {
+                "Order": {
                     "type": "integer"
                 },
-                "title": {
+                "Title": {
                     "type": "string"
                 }
             }

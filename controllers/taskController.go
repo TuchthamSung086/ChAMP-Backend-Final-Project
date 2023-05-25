@@ -18,8 +18,7 @@ import (
 // @Tags Task
 // @Accept json
 // @Produce json
-// @Param listID body string true "ID of the list this task is going to be placed in"
-// @Param task body models.SwaggerInputCreateTask true "Title of this Task"
+// @Param task body models.SwaggerInputCreateTask true "Details of this Task"
 // @Success 200 {object} models.SwaggerTask
 // @Router /task [post]
 func TaskCreate(c *gin.Context) {
@@ -82,11 +81,11 @@ func TaskGetAll(c *gin.Context) {
 // @Schemes
 // @Description Get a task by id
 // @Tags Task
-// @Param id path string true "ID of task to get"
+// @Param id path int true "ID of task to get"
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.SwaggerTask
-// @Router /task/:id [get]
+// @Router /task/{id} [get]
 func TaskGet(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
@@ -103,12 +102,12 @@ func TaskGet(c *gin.Context) {
 // @Schemes
 // @Description Update task with id. Fields [Title, Order, ListID] can be updated. Changing the order will affect other tasks too, just like inserting in c++ vector. Changing list without specifying Order will put it in the last order.
 // @Tags Task
-// @Param id path string true "ID of task to update"
+// @Param id path int true "ID of task to update"
 // @Param task body models.SwaggerInputUpdateTask false "Details to update"
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.SwaggerTask
-// @Router /task/:id [put]
+// @Router /task/{id} [put]
 func TaskUpdate(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
@@ -156,11 +155,11 @@ func TaskUpdate(c *gin.Context) {
 // @Schemes
 // @Description Delete task with id. The orders of other tasks will be updated.
 // @Tags Task
-// @Param id path string true "ID of task to delete"
+// @Param id path int true "ID of task to delete"
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.SwaggerTask
-// @Router /task/:id [delete]
+// @Router /task/{id} [delete]
 func TaskDelete(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")

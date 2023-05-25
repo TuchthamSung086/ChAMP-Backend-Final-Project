@@ -28,36 +28,36 @@ definitions:
     type: object
   models.SwaggerInputCreateList:
     properties:
-      order:
+      Order:
         type: integer
-      title:
+      Title:
         type: string
     type: object
   models.SwaggerInputCreateTask:
     properties:
-      description:
+      Description:
         type: string
-      list_id:
+      ListID:
         type: integer
-      title:
+      Title:
         type: string
     type: object
   models.SwaggerInputUpdateList:
     properties:
-      order:
+      Order:
         type: integer
-      title:
+      Title:
         type: string
     type: object
   models.SwaggerInputUpdateTask:
     properties:
-      description:
+      Description:
         type: string
-      list_id:
+      ListID:
         type: integer
-      order:
+      Order:
         type: integer
-      title:
+      Title:
         type: string
     type: object
   models.SwaggerList:
@@ -130,7 +130,7 @@ paths:
       summary: Create a List
       tags:
       - List
-  /list/:id:
+  /list/{id}:
     delete:
       consumes:
       - application/json
@@ -140,7 +140,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -160,7 +160,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -181,7 +181,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       - description: Details to update
         in: body
         name: list
@@ -219,13 +219,7 @@ paths:
       description: Create a Task with auto-set Order (set as last Order in database)
         in a list specified by listID.
       parameters:
-      - description: ID of the list this task is going to be placed in
-        in: body
-        name: listID
-        required: true
-        schema:
-          type: string
-      - description: Title of this Task
+      - description: Details of this Task
         in: body
         name: task
         required: true
@@ -241,7 +235,7 @@ paths:
       summary: Create a Task
       tags:
       - Task
-  /task/:id:
+  /task/{id}:
     delete:
       consumes:
       - application/json
@@ -251,7 +245,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -271,7 +265,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -293,7 +287,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       - description: Details to update
         in: body
         name: task

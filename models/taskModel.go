@@ -22,16 +22,16 @@ type Task struct {
 }
 
 type SwaggerInputCreateTask struct {
-	Title       string `gorm:"not null;size:255;" json:"title"`
-	Description string `gorm:"size:255" json:"description"`
-	ListID      uint   `gorm:"not null;"  json:"list_id"`
+	Title       string `gorm:"not null;size:255;" json:"Title"`
+	Description string `gorm:"size:255" json:"Description"`
+	ListID      uint   `gorm:"not null;"  json:"ListID"`
 }
 
 type SwaggerInputUpdateTask struct {
-	Title       string `gorm:"not null;size:255;" json:"title"`
-	Description string `gorm:"size:255" json:"description"`
-	ListID      uint   `gorm:"not null;"  json:"list_id"`
-	Order       int    `gorm:"not null;index:,sort:asc,type:btree" json:"order"`
+	Title       string `gorm:"not null;size:255;" json:"Title"`
+	Description string `gorm:"size:255" json:"Description"`
+	ListID      uint   `gorm:"not null;"  json:"ListID"`
+	Order       int    `gorm:"not null;index:,sort:asc,type:btree" json:"Order"`
 }
 
 type SwaggerTasks struct {

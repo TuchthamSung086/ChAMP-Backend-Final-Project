@@ -71,11 +71,11 @@ func ListGetAll(c *gin.Context) {
 // @Schemes
 // @Description Get a list by id
 // @Tags List
-// @Param id path string true "ID of list to get"
+// @Param id path int true "ID of list to get"
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.SwaggerList
-// @Router /list/:id [get]
+// @Router /list/{id} [get]
 func ListGet(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
@@ -92,12 +92,12 @@ func ListGet(c *gin.Context) {
 // @Schemes
 // @Description Update list with id. Fields [Title, Order] can be updated. Changing the order will affect other lists too, just like inserting in c++ vector.
 // @Tags List
-// @Param id path string true "ID of list to update"
+// @Param id path int true "ID of list to update"
 // @Param list body models.SwaggerInputUpdateList false "Details to update"
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.SwaggerList
-// @Router /list/:id [put]
+// @Router /list/{id} [put]
 func ListUpdate(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
@@ -138,11 +138,11 @@ func ListUpdate(c *gin.Context) {
 // @Schemes
 // @Description Delete list with id. The orders of other lists will be updated.
 // @Tags List
-// @Param id path string true "ID of list to delete"
+// @Param id path int true "ID of list to delete"
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.SwaggerList
-// @Router /list/:id [delete]
+// @Router /list/{id} [delete]
 func ListDelete(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")

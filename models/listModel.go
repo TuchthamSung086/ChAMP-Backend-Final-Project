@@ -16,13 +16,13 @@ type List struct {
 }
 
 type SwaggerInputCreateList struct {
-	Title string `gorm:"not null;size:255;" json:"title"`
-	Order int    `gorm:"not null;index:,sort:asc,type:btree" json:"order"`
+	Title string `gorm:"not null;size:255;" json:"Title"`
+	Order int    `gorm:"not null;index:,sort:asc,type:btree" json:"Order"`
 }
 
 type SwaggerInputUpdateList struct {
-	Title string `gorm:"not null;size:255;" json:"title"`
-	Order int    `gorm:"not null;index:,sort:asc,type:btree" json:"order"`
+	Title string `gorm:"not null;size:255;" json:"Title"`
+	Order int    `gorm:"not null;index:,sort:asc,type:btree" json:"Order"`
 }
 
 type SwaggerLists struct {
