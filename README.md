@@ -4,6 +4,12 @@ By Tuchtham Sungkameka
 
 I plan to use Golang, which I have zero experience with.
 
+### Setup your own .env
+
+Create your own .env file from .env.example
+
+You can use the exact database service, I am not planning to close it soon.
+
 ### These are the keywords I will try to adapt into my project.
 
 1. Gin: rest api
