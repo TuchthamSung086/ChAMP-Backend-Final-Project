@@ -12,6 +12,16 @@ import (
 	"gorm.io/gorm"
 )
 
+// @Summary Create a Task
+// @Schemes
+// @Description Create a Task with auto-set Order (set as last Order in database) in a list specified by listID.
+// @Tags Task
+// @Accept json
+// @Produce json
+// @Param listID body string true "ID of the list this task is going to be placed in"
+// @Param task body models.SwaggerInputCreateTask true "Title of this Task"
+// @Success 200 {object} models.SwaggerTask
+// @Router /task [post]
 func TaskCreate(c *gin.Context) {
 	// Get data off request body
 	var body struct {
@@ -24,6 +34,16 @@ func TaskCreate(c *gin.Context) {
 
 	// Create a Task
 	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: utils.GetLatestTaskOrder(int(body.ListID)) + 1, ListID: body.ListID}
+
+	// Fix range
+	if body.Order < 0 {
+		body.Order = 1
+	} else if x := utils.GetLatestTaskOrder(int(task.ListID)); body.Order > x {
+		body.Order = x
+	}
+
+	// Update if change order
+	logic.TaskReorder(task, body.Order)
 
 	result := initializers.DB.Create(&task) // pass pointer of data to Create
 
@@ -39,6 +59,14 @@ func TaskCreate(c *gin.Context) {
 	})
 }
 
+// @Summary Get All Tasks in database
+// @Schemes
+// @Description Get All Tasks in database
+// @Tags Task
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.SwaggerTasks
+// @Router /tasks [get]
 func TaskGetAll(c *gin.Context) {
 	// Get all records
 	var tasks []models.Task
@@ -50,6 +78,15 @@ func TaskGetAll(c *gin.Context) {
 	})
 }
 
+// @Summary Get Task By ID
+// @Schemes
+// @Description Get a task by id
+// @Tags Task
+// @Param id path string true "ID of task to get"
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.SwaggerTask
+// @Router /task/:id [get]
 func TaskGet(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
@@ -62,6 +99,16 @@ func TaskGet(c *gin.Context) {
 
 }
 
+// @Summary Update task by id
+// @Schemes
+// @Description Update task with id. Fields [Title, Order, ListID] can be updated. Changing the order will affect other tasks too, just like inserting in c++ vector. Changing list without specifying Order will put it in the last order.
+// @Tags Task
+// @Param id path string true "ID of task to update"
+// @Param task body models.SwaggerInputUpdateTask false "Details to update"
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.SwaggerTask
+// @Router /task/:id [put]
 func TaskUpdate(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
@@ -105,6 +152,15 @@ func TaskUpdate(c *gin.Context) {
 	})
 }
 
+// @Summary Delete task by id
+// @Schemes
+// @Description Delete task with id. The orders of other tasks will be updated.
+// @Tags Task
+// @Param id path string true "ID of task to delete"
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.SwaggerTask
+// @Router /task/:id [delete]
 func TaskDelete(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")

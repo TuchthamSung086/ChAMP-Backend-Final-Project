@@ -24,7 +24,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.List"
+                            "$ref": "#/definitions/models.SwaggerInputCreateList"
                         }
                     }
                 ],
@@ -32,7 +32,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.SwaggerInputCreate"
+                            "$ref": "#/definitions/models.SwaggerList"
                         }
                     }
                 }
@@ -51,6 +51,83 @@
                     "List"
                 ],
                 "summary": "Get List By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of list to get",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerList"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update list with id. Fields [Title, Order] can be updated. Changing the order will affect other lists too, just like inserting in c++ vector.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "List"
+                ],
+                "summary": "Update list by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of list to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Details to update",
+                        "name": "list",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerInputUpdateList"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerList"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete list with id. The orders of other lists will be updated.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "List"
+                ],
+                "summary": "Delete list by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of list to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -79,6 +156,172 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.SwaggerLists"
+                        }
+                    }
+                }
+            }
+        },
+        "/task": {
+            "post": {
+                "description": "Create a Task with auto-set Order (set as last Order in database) in a list specified by listID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Create a Task",
+                "parameters": [
+                    {
+                        "description": "ID of the list this task is going to be placed in",
+                        "name": "listID",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Title of this Task",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerInputCreateTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerTask"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/:id": {
+            "get": {
+                "description": "Get a task by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get Task By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of task to get",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerTask"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update task with id. Fields [Title, Order, ListID] can be updated. Changing the order will affect other tasks too, just like inserting in c++ vector. Changing list without specifying Order will put it in the last order.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Update task by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of task to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Details to update",
+                        "name": "task",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerInputUpdateTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerTask"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete task with id. The orders of other tasks will be updated.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Delete task by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of task to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerTask"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks": {
+            "get": {
+                "description": "Get All Tasks in database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get All Tasks in database",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SwaggerTasks"
                         }
                     }
                 }
@@ -127,9 +370,54 @@
                 }
             }
         },
-        "models.SwaggerInputCreate": {
+        "models.SwaggerInputCreateList": {
             "type": "object",
             "properties": {
+                "order": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SwaggerInputCreateTask": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "list_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SwaggerInputUpdateList": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SwaggerInputUpdateTask": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "list_id": {
+                    "type": "integer"
+                },
+                "order": {
+                    "type": "integer"
+                },
                 "title": {
                     "type": "string"
                 }
@@ -146,10 +434,29 @@
         "models.SwaggerLists": {
             "type": "object",
             "properties": {
-                "list": {
+                "lists": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.List"
+                    }
+                }
+            }
+        },
+        "models.SwaggerTask": {
+            "type": "object",
+            "properties": {
+                "task": {
+                    "$ref": "#/definitions/models.Task"
+                }
+            }
+        },
+        "models.SwaggerTasks": {
+            "type": "object",
+            "properties": {
+                "tasks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Task"
                     }
                 }
             }

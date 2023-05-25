@@ -15,12 +15,18 @@ type List struct {
 	Tasks      []Task `gorm:"foreignKey:ListID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
-type SwaggerInputCreate struct {
+type SwaggerInputCreateList struct {
 	Title string `gorm:"not null;size:255;" json:"title"`
+	Order int    `gorm:"not null;index:,sort:asc,type:btree" json:"order"`
+}
+
+type SwaggerInputUpdateList struct {
+	Title string `gorm:"not null;size:255;" json:"title"`
+	Order int    `gorm:"not null;index:,sort:asc,type:btree" json:"order"`
 }
 
 type SwaggerLists struct {
-	List []List `json:"list"`
+	Lists []List `json:"lists"`
 }
 
 type SwaggerList struct {
