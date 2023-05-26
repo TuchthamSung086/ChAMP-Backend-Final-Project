@@ -7,13 +7,13 @@ import (
 )
 
 func ListCreate(list *models.ControllerList) (*models.ControllerList, error) {
-	dbList := models.List{Title: list.Title, Order: list.Order}
+	dbList := controllerListToList(list)
 	// Fix Order
 	if dbList.Order == 0 {
 		dbList.Order = listGetLatestOrder() + 1
 	}
 
-	result := db.Preload(clause.Associations).Create(&dbList) // pass pointer of data to Create
+	result := db.Preload(clause.Associations).Create(dbList) // pass pointer of data to Create
 
 	// check error
 	if result.Error != nil {
@@ -21,7 +21,7 @@ func ListCreate(list *models.ControllerList) (*models.ControllerList, error) {
 	}
 
 	// continue happy path
-	return listToControllerList(&dbList), nil
+	return listToControllerList(dbList), nil
 }
 
 func ListGetAll() ([]*models.ControllerList, error) {
@@ -39,4 +39,17 @@ func ListGetById(id uint) *models.ControllerList {
 	var list models.List
 	db.Preload(clause.Associations).First(&list, id)
 	return listToControllerList(&list)
+}
+
+func ListUpdate(list *models.ControllerList) (*models.ControllerList, error) {
+	// list.Order = listFixOrderRange(list.Order)
+
+	// // Update if change order
+	// logic.ListReorder(list, list.Order)
+
+	// // Update basic info
+	// initializers.DB.Model(&list).Updates(models.List{
+	// 	Title: list.Title,
+	// })
+	return nil, nil
 }
