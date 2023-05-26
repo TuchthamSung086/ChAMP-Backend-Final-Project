@@ -54,9 +54,12 @@ func ListCreate(c *gin.Context) {
 // @Router /lists [get]
 func ListGetAll(c *gin.Context) {
 	// Get all records
-	var lists []models.List
-	initializers.DB.Preload(clause.Associations).Find(&lists)
+	lists, err := database.ListGetAll()
 
+	if err != nil {
+		c.Status(400)
+		return
+	}
 	// Return
 	c.JSON(200, gin.H{
 		"lists": lists,
