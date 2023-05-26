@@ -35,21 +35,31 @@ func ListGetAll() ([]*models.ControllerList, error) {
 	return listsToControllerLists(lists), nil
 }
 
-func ListGetById(id uint) *models.ControllerList {
+func ListGetById(id uint) (*models.ControllerList, error) {
 	var list models.List
-	db.Preload(clause.Associations).First(&list, id)
-	return listToControllerList(&list)
+	result := db.Preload(clause.Associations).First(&list, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return listToControllerList(&list), nil
 }
 
-func ListUpdate(list *models.ControllerList) (*models.ControllerList, error) {
-	// list.Order = listFixOrderRange(list.Order)
+func ListUpdate(id uint, updateBody *models.ControllerList) (*models.ControllerList, error) {
+	updateBody.Order = listFixOrderRange(updateBody.Order)
+	var list *models.List
+	db.Preload(clause.Associations).First(&list, id)
 
-	// // Update if change order
-	// logic.ListReorder(list, list.Order)
+	// Update if change order
+	listReorder(list, updateBody.Order)
 
-	// // Update basic info
-	// initializers.DB.Model(&list).Updates(models.List{
-	// 	Title: list.Title,
-	// })
-	return nil, nil
+	// Update basic info
+	result := db.Model(list).Updates(models.List{
+		Title: updateBody.Title,
+	})
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return listToControllerList(list), nil
 }

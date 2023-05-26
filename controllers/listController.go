@@ -3,7 +3,6 @@ package controllers
 import (
 	"ChAMP-Backend-Final-Project/database"
 	"ChAMP-Backend-Final-Project/initializers"
-	"ChAMP-Backend-Final-Project/logic"
 	"ChAMP-Backend-Final-Project/models"
 	"ChAMP-Backend-Final-Project/utils"
 	"fmt"
@@ -35,7 +34,9 @@ func ListCreate(c *gin.Context) {
 	list, err := database.ListCreate(body)
 
 	if err != nil {
-		c.Status(400)
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 
@@ -58,7 +59,9 @@ func ListGetAll(c *gin.Context) {
 	lists, err := database.ListGetAll()
 
 	if err != nil {
-		c.Status(400)
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 	// Return
@@ -84,7 +87,15 @@ func ListGet(c *gin.Context) {
 		fmt.Println(err)
 	}
 
-	list := database.ListGetById(uint(listId))
+	list, err := database.ListGetById(uint(listId))
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	// Return
 	c.JSON(200, gin.H{
 		"list": list,
@@ -105,33 +116,24 @@ func ListGet(c *gin.Context) {
 func ListUpdate(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
-	var list models.List
-	initializers.DB.First(&list, id)
-
-	// Get data from req body
-	var body struct {
-		models.List
+	listId, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		fmt.Println(err)
 	}
-	if err := c.ShouldBindJSON(&body); err != nil {
+	// Get data from req body
+	body := &models.ControllerList{}
+	if err := c.ShouldBindJSON(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Fix range
-	if body.Order < 0 {
-		body.Order = 1
-	} else if x := utils.GetLatestListOrder(); body.Order > x {
-		body.Order = x
+	list, err := database.ListUpdate(uint(listId), body)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
-
-	// Update if change order
-	logic.ListReorder(list, body.Order)
-
-	// Update basic info
-	initializers.DB.Model(&list).Updates(models.List{
-		Title: body.Title,
-	})
-
 	// Return
 	c.JSON(200, gin.H{
 		"list": list,
