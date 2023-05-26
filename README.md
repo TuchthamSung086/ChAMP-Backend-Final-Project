@@ -4,6 +4,10 @@ By Tuchtham Sungkameka
 
 I plan to use Golang, which I have zero experience with.
 
+### Architecture
+
+PostgreSQL DB in cloud <---> database package <---> controller package <---> routes package <---> main/user
+
 ### Setup your own .env
 
 Create your own .env file from .env.example

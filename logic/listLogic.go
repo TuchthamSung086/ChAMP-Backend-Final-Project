@@ -34,3 +34,7 @@ func ListReorder(list models.List, to int) {
 		listMoveToBack(list, to)
 	}
 }
+
+func hi() string {
+	return "hi"
+}

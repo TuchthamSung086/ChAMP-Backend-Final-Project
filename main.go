@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ChAMP-Backend-Final-Project/database"
 	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/routes"
 )
@@ -8,6 +9,7 @@ import (
 func init() {
 	initializers.LoadEnvVariables()
 	initializers.ConnectToDB()
+	database.ConnectToDB()
 }
 
 func main() {

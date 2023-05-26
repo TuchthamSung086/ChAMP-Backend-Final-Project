@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ChAMP-Backend-Final-Project/database"
 	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/logic"
 	"ChAMP-Backend-Final-Project/models"
@@ -23,21 +24,16 @@ import (
 // @Router /list [post]
 func ListCreate(c *gin.Context) {
 	// Get data off request body
-	var body struct {
-		models.List
-	}
-
-	if err := c.ShouldBindJSON(&body); err != nil {
+	body := &models.ControllerList{}
+	if err := c.ShouldBindJSON(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Create a Task
-	list := models.List{Title: body.Title, Order: utils.GetLatestListOrder() + 1}
+	// Create a List
+	list, err := database.ListCreate(body)
 
-	result := initializers.DB.Create(&list) // pass pointer of data to Create
-
-	if result.Error != nil {
+	if err != nil {
 		c.Status(400)
 		return
 	}
