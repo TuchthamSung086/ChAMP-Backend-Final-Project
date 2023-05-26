@@ -34,3 +34,9 @@ func ListGetAll() ([]*models.ControllerList, error) {
 
 	return listsToControllerLists(lists), nil
 }
+
+func ListGetById(id uint) *models.ControllerList {
+	var list models.List
+	db.Preload(clause.Associations).First(&list, id)
+	return listToControllerList(&list)
+}

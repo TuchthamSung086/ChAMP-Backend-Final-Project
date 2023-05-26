@@ -6,11 +6,12 @@ import (
 	"ChAMP-Backend-Final-Project/logic"
 	"ChAMP-Backend-Final-Project/models"
 	"ChAMP-Backend-Final-Project/utils"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 // @Summary Create a List
@@ -78,8 +79,12 @@ func ListGetAll(c *gin.Context) {
 func ListGet(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
-	var list models.List
-	initializers.DB.Preload(clause.Associations).First(&list, id)
+	listId, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	list := database.ListGetById(uint(listId))
 	// Return
 	c.JSON(200, gin.H{
 		"list": list,
