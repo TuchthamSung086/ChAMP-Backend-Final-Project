@@ -4,13 +4,11 @@ import (
 	"ChAMP-Backend-Final-Project/database"
 	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/models"
-	"ChAMP-Backend-Final-Project/utils"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // @Summary Create a List
@@ -152,20 +150,17 @@ func ListUpdate(c *gin.Context) {
 func ListDelete(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
-	var list models.List
-	initializers.DB.First(&list, id)
-
-	// Delete all the tasks in it
-	initializers.DB.Delete(&models.Task{}, "list_id = ?", id)
-
-	// Decrease order of lists after this list
-	initializers.DB.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, list.Order+1, utils.GetLatestListOrder()).Update(`"order"`, gorm.Expr(`"order" - 1`))
-
-	// Delete the list
-	initializers.DB.Delete(&models.List{}, id)
-
+	listId, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		fmt.Println(err)
+	}
+	deletedList, err := database.ListDelete(uint(listId))
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
 	// Return
-	c.Status(200)
+	c.JSON(200, gin.H{"deletedList": deletedList})
 }
 
 // Hard Delete for testing

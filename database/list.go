@@ -3,6 +3,7 @@ package database
 import (
 	"ChAMP-Backend-Final-Project/models"
 
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
@@ -62,4 +63,27 @@ func ListUpdate(id uint, updateBody *models.ControllerList) (*models.ControllerL
 	}
 
 	return listToControllerList(list), nil
+}
+
+func ListDelete(id uint) (*models.ControllerList, error) {
+	// Find list with id
+	var list models.List
+	db.First(&list, id)
+
+	// Delete all the tasks in it
+	db.Delete(&models.Task{}, "list_id = ?", id)
+
+	// Decrease order of lists after this list
+	db.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, list.Order+1, listGetLatestOrder()).Update(`"order"`, gorm.Expr(`"order" - 1`))
+
+	// Save value to return deleted list
+	deletedList := listToControllerList(&list)
+
+	// Delete the list
+	result := db.Delete(&models.List{}, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return deletedList, nil
 }
