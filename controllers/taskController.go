@@ -149,7 +149,6 @@ func (tc *TaskController) Update(c *gin.Context) {
 	})
 }
 
-/*
 // @Summary Delete task by id
 // @Schemes
 // @Description Delete task with id. The orders of other tasks will be updated.
@@ -159,22 +158,25 @@ func (tc *TaskController) Update(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.SwaggerTask
 // @Router /task/{id} [delete]
-func TaskDelete(c *gin.Context) {
+func (tc *TaskController) Delete(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
-	var task models.Task
-	initializers.DB.First(&task, id)
+	taskId, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	// Decrease order of tasks after this task
-	initializers.DB.Model(&models.Task{}).Where(`list_id = ? AND "order" BETWEEN ? AND ?`, task.ListID, task.Order+1, utils.GetLatestTaskOrder(int(task.ListID))).Update(`"order"`, gorm.Expr(`"order" - 1`))
-
-	// Delete
-	initializers.DB.Delete(&models.Task{}, id)
+	deletedTask, err := tc.ts.Delete(uint(taskId))
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Return
-	c.Status(200)
+	c.JSON(200, gin.H{"deletedTask": deletedTask})
 }
 
+/*
 // Restore deleted task
 func TaskRestore(c *gin.Context) {
 	// Find task with id

@@ -15,7 +15,7 @@ type TaskService interface {
 	GetAll() ([]*models.ControllerTask, error)
 	GetById(id uint) (*models.ControllerTask, error)
 	Update(id uint, updateBody *models.ControllerTask) (*models.ControllerTask, error)
-	// Delete(id uint) (*models.ControllerTask, error)
+	Delete(id uint) (*models.ControllerTask, error)
 	// DeleteAll() error
 }
 
@@ -98,4 +98,24 @@ func (ts *taskService) Update(id uint, updateBody *models.ControllerTask) (*mode
 	}
 
 	return ts.taskToControllerTask(task), nil
+}
+
+func (ts *taskService) Delete(id uint) (*models.ControllerTask, error) {
+	// Find task with id
+	var task models.Task
+	ts.db.First(&task, id)
+
+	// Decrease order of tasks after this task
+	ts.db.Model(&models.Task{}).Where(`list_id = ? AND "order" BETWEEN ? AND ?`, task.ListID, task.Order+1, ts.getLatestTaskOrder(int(task.ListID))).Update(`"order"`, gorm.Expr(`"order" - 1`))
+
+	// Save value to return deleted task
+	deletedTask := ts.taskToControllerTask(&task)
+
+	// Delete
+	result := ts.db.Delete(&models.Task{}, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return deletedTask, nil
 }

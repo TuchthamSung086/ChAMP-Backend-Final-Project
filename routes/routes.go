@@ -50,4 +50,5 @@ func SetTaskControllerRoutes(r *gin.Engine, tc *controllers.TaskController) {
 	r.GET("/tasks", tc.GetAll)
 	r.GET("/task/:id", tc.GetById)
 	r.PUT("/task/:id", tc.Update)
+	r.DELETE("/task/:id", tc.Delete)
 }
