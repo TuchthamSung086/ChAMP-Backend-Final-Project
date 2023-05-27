@@ -3,7 +3,9 @@ package controllers
 import (
 	"ChAMP-Backend-Final-Project/database"
 	"ChAMP-Backend-Final-Project/models"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -74,7 +76,6 @@ func (tc *TaskController) GetAll(c *gin.Context) {
 	})
 }
 
-/*
 // @Summary Get Task By ID
 // @Schemes
 // @Description Get a task by id
@@ -84,11 +85,24 @@ func (tc *TaskController) GetAll(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.SwaggerTask
 // @Router /task/{id} [get]
-func TaskGet(c *gin.Context) {
+func (tc *TaskController) GetById(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
-	var task models.Task
-	initializers.DB.First(&task, id)
+	taskId, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Get by Id from database
+	task, err := tc.ts.GetById(uint(taskId))
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	// Return
 	c.JSON(200, gin.H{
 		"task": task,
@@ -96,6 +110,7 @@ func TaskGet(c *gin.Context) {
 
 }
 
+/*
 // @Summary Update task by id
 // @Schemes
 // @Description Update task with id. Fields [Title, Order, ListID] can be updated. Changing the order will affect other tasks too, just like inserting in c++ vector. Changing list without specifying Order will put it in the last order.

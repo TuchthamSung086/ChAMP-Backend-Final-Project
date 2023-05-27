@@ -48,4 +48,5 @@ func SetListControllerRoutes(r *gin.Engine, lc *controllers.ListController) {
 func SetTaskControllerRoutes(r *gin.Engine, tc *controllers.TaskController) {
 	r.POST("/task", tc.Create)
 	r.GET("/tasks", tc.GetAll)
+	r.GET("/task/:id", tc.GetById)
 }

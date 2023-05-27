@@ -13,7 +13,7 @@ import (
 type TaskService interface {
 	Create(list *models.ControllerTask) (*models.ControllerTask, error)
 	GetAll() ([]*models.ControllerTask, error)
-	// GetById(id uint) (*models.ControllerTask, error)
+	GetById(id uint) (*models.ControllerTask, error)
 	// Update(id uint, updateBody *models.ControllerTask) (*models.ControllerTask, error)
 	// Delete(id uint) (*models.ControllerTask, error)
 	// DeleteAll() error
@@ -59,4 +59,13 @@ func (ts *taskService) GetAll() ([]*models.ControllerTask, error) {
 	}
 
 	return ts.tasksToControllerTasks(tasks), nil
+}
+
+func (ts *taskService) GetById(id uint) (*models.ControllerTask, error) {
+	var task models.Task
+	result := ts.db.Preload(clause.Associations).First(&task, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return ts.taskToControllerTask(&task), nil
 }
