@@ -7,11 +7,15 @@ import (
 
 func init() {
 	initializers.LoadEnvVariables()
-	initializers.ConnectToDB()
+
 }
 
 func main() {
+	db, err := initializers.ConnectToDB()
+	if err != nil {
+		panic("Cannot migrate database")
+	}
 	// Migrate the schema
-	initializers.DB.AutoMigrate(&models.Task{})
-	initializers.DB.AutoMigrate(&models.List{})
+	db.AutoMigrate(&models.Task{})
+	db.AutoMigrate(&models.List{})
 }

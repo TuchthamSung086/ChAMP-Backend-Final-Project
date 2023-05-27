@@ -1,11 +1,6 @@
 package utils
 
-import (
-	"ChAMP-Backend-Final-Project/initializers"
-	"ChAMP-Backend-Final-Project/models"
-)
-
-func GetLatestListOrder() int {
+/* func GetLatestListOrder() int {
 	var res models.List
 	initializers.DB.Model(&models.List{}).Order(`"order" desc`).Limit(1).Find(&res)
 	if res.Order >= 1 {
@@ -22,3 +17,4 @@ func GetLatestTaskOrder(listID int) int {
 	}
 	return 0
 }
+*/

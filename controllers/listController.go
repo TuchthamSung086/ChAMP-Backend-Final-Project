@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"ChAMP-Backend-Final-Project/database"
-	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/models"
 	"fmt"
 	"net/http"
@@ -10,6 +9,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
+// FACTORY
+type ListController struct {
+	ls database.ListService
+}
+
+// Receive real interface (not pointer)
+// Return real controller object struct (not pointer)
+func NewListController(ls database.ListService) ListController {
+	return ListController{ls: ls}
+}
 
 // @Summary Create a List
 // @Schemes
@@ -20,8 +30,9 @@ import (
 // @Param list body models.SwaggerInputCreateList true "Title of this List"
 // @Success 200 {object} models.SwaggerList
 // @Router /list [post]
-func ListCreate(c *gin.Context) {
+func (lc *ListController) ListCreate(c *gin.Context) {
 	// Get data off request body
+
 	body := &models.ControllerList{}
 	if err := c.ShouldBindJSON(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -29,8 +40,7 @@ func ListCreate(c *gin.Context) {
 	}
 
 	// Create a List
-	list, err := database.ListCreate(body)
-
+	list, err := lc.ls.ListCreate(body)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": err.Error(),
@@ -52,9 +62,9 @@ func ListCreate(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.SwaggerLists
 // @Router /lists [get]
-func ListGetAll(c *gin.Context) {
+func (lc *ListController) ListGetAll(c *gin.Context) {
 	// Get all records
-	lists, err := database.ListGetAll()
+	lists, err := lc.ls.ListGetAll()
 
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -77,7 +87,7 @@ func ListGetAll(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.SwaggerList
 // @Router /list/{id} [get]
-func ListGet(c *gin.Context) {
+func (lc *ListController) ListGet(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
 	listId, err := strconv.ParseUint(id, 10, 32)
@@ -85,7 +95,7 @@ func ListGet(c *gin.Context) {
 		fmt.Println(err)
 	}
 
-	list, err := database.ListGetById(uint(listId))
+	list, err := lc.ls.ListGetById(uint(listId))
 
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -111,7 +121,7 @@ func ListGet(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.SwaggerList
 // @Router /list/{id} [put]
-func ListUpdate(c *gin.Context) {
+func (lc *ListController) ListUpdate(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
 	listId, err := strconv.ParseUint(id, 10, 32)
@@ -125,7 +135,7 @@ func ListUpdate(c *gin.Context) {
 		return
 	}
 
-	list, err := database.ListUpdate(uint(listId), body)
+	list, err := lc.ls.ListUpdate(uint(listId), body)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": err.Error(),
@@ -147,14 +157,14 @@ func ListUpdate(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.SwaggerList
 // @Router /list/{id} [delete]
-func ListDelete(c *gin.Context) {
+func (lc *ListController) ListDelete(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
 	listId, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
 		fmt.Println(err)
 	}
-	deletedList, err := database.ListDelete(uint(listId))
+	deletedList, err := lc.ls.ListDelete(uint(listId))
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -164,9 +174,9 @@ func ListDelete(c *gin.Context) {
 }
 
 // Hard Delete for testing
-func ListDeleteAll(c *gin.Context) {
+func (lc *ListController) ListDeleteAll(c *gin.Context) {
 	// Delete
-	initializers.DB.Unscoped().Delete(&models.List{}, "Title LIKE ?", "%")
+	lc.ls.ListDeleteAll()
 
 	// Return
 	c.Status(200)

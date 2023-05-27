@@ -21,22 +21,25 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 
-	r.POST("/task", controllers.TaskCreate)
-	r.GET("/tasks", controllers.TaskGetAll)
-	r.GET("/task/:id", controllers.TaskGet)
-	r.PUT("/task/:id", controllers.TaskUpdate)
-	r.DELETE("/task/:id", controllers.TaskDelete)
+	// r.POST("/task", controllers.TaskCreate)
+	// r.GET("/tasks", controllers.TaskGetAll)
+	// r.GET("/task/:id", controllers.TaskGet)
+	// r.PUT("/task/:id", controllers.TaskUpdate)
+	// r.DELETE("/task/:id", controllers.TaskDelete)
 
-	r.POST("/list", controllers.ListCreate)
-	r.GET("/lists", controllers.ListGetAll)
-	r.GET("/list/:id", controllers.ListGet)
-	r.PUT("/list/:id", controllers.ListUpdate)
-	r.DELETE("/list/:id", controllers.ListDelete)
-
-	r.DELETE("/dev/clearDB", controllers.ClearDatabase)
+	// r.DELETE("/dev/clearDB", controllers.ClearDatabase)
 
 	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
+}
+
+// r here is router
+func SetListControllerRoutes(r *gin.Engine, lc *controllers.ListController) {
+	r.POST("/list", lc.ListCreate)
+	r.GET("/lists", lc.ListGetAll)
+	r.GET("/list/:id", lc.ListGet)
+	r.PUT("/list/:id", lc.ListUpdate)
+	r.DELETE("/list/:id", lc.ListDelete)
 }

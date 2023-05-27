@@ -85,8 +85,8 @@ func TestPlayground(t *testing.T) {
 	type Result struct {
 		Title string
 	}
-	var result Result
-	initializers.DB.Raw("SELECT id, name, age FROM users WHERE id = ?", 3).Scan(&result)
+	// var result Result
+	// initializers.DB.Raw("SELECT id, name, age FROM users WHERE id = ?", 3).Scan(&result)
 	// res := testAPI(t,"GET","/lists","")
 	// assert.Equal(t, http.StatusCreated, w.Code)
 }

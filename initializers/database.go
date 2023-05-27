@@ -10,9 +10,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var DB *gorm.DB
-
-func ConnectToDB() {
+func ConnectToDB() (*gorm.DB, error) {
 	// postgres://hkcvsced:oEHB4yXtI4J7cWveGE4ctA_da2iSrWgr@arjuna.db.elephantsql.com/hkcvsced
 
 	newLogger := logger.New(
@@ -26,11 +24,13 @@ func ConnectToDB() {
 		},
 	)
 
-	var err error
 	dsn := os.Getenv("DB_URL")
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: newLogger})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: newLogger})
 
 	if err != nil {
 		log.Fatal("Failed to connect to database")
+		return db, err
 	}
+
+	return db, err
 }

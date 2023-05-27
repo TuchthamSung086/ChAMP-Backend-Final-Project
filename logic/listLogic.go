@@ -1,4 +1,4 @@
-package logic
+/* package logic
 
 import (
 	"ChAMP-Backend-Final-Project/initializers"
@@ -38,3 +38,4 @@ func ListReorder(list models.List, to int) {
 func hi() string {
 	return "hi"
 }
+*/

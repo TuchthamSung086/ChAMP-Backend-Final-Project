@@ -12,6 +12,7 @@ import (
 - Order
 */
 
+// For database
 type Task struct {
 	gorm.Model            // https://gorm.io/docs/models.html
 	ListID      uint      `gorm:"not null;"`
@@ -19,6 +20,16 @@ type Task struct {
 	Description string    `gorm:"size:255"`
 	DueDate     time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	Order       int       `gorm:"not null;index:,sort:asc,type:btree"`
+}
+
+// For controller
+type ControllerTask struct {
+	ID          uint
+	ListID      uint
+	Title       string
+	Description string
+	DueDate     time.Time
+	Order       int
 }
 
 type SwaggerInputCreateTask struct {

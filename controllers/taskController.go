@@ -1,5 +1,6 @@
 package controllers
 
+/*
 import (
 	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/logic"
@@ -204,3 +205,4 @@ func TaskDeleteAll(c *gin.Context) {
 	// Return
 	c.Status(200)
 }
+*/

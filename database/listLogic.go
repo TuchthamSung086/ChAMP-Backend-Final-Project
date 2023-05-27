@@ -1,15 +1,14 @@
 package database
 
 import (
-	"ChAMP-Backend-Final-Project/initializers"
 	"ChAMP-Backend-Final-Project/models"
 
 	"gorm.io/gorm"
 )
 
-func listGetLatestOrder() int {
+func listGetLatestOrder(db *gorm.DB) int {
 	var res models.List
-	initializers.DB.Model(&models.List{}).Order(`"order" desc`).Limit(1).Find(&res)
+	db.Model(&models.List{}).Order(`"order" desc`).Limit(1).Find(&res)
 	if res.Order >= 1 {
 		return res.Order
 	}
@@ -42,11 +41,11 @@ func listsToControllerLists(lists []models.List) []*models.ControllerList {
 	return controllerLists
 }
 
-func listFixOrderRange(order int) int {
+func listFixOrderRange(order int, db *gorm.DB) int {
 	// Fix range
 	if order < 0 {
 		return 1
-	} else if x := listGetLatestOrder(); order > x {
+	} else if x := listGetLatestOrder(db); order > x {
 		return x
 	}
 	return order
