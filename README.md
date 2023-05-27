@@ -32,7 +32,10 @@ You can use the exact database service, I am not planning to close it soon.
 5. `go get -u gorm.io/gorm` our ORM
 6. `go get -u gorm.io/driver/postgres` our DB
 7. `go get github.com/stretchr/testify` our tester
-8.
+
+Note: https://coderwall.com/p/arxtja/install-all-go-project-dependencies-in-one-command
+
+Change directory into the project and simply run`go get ./...` to install all dependencies of a Golang project or golang projects recursively
 
 ```
 go get -u github.com/swaggo/swag
@@ -48,10 +51,9 @@ go install github.com/swaggo/swag/cmd/swag
 
 ### Terminal Commands
 
-0. `go build .\main.go; go run .\main.go` to run the server / run main system
-1. `CompileDaemon -command="./ChAMP-Backend-Final-Project"` to make CompileDaemon report to terminal in realtime
-2. `go build .\migrate\; go run .\migrate\` to migrate (update table schema) of our model files to the database
-3. `swag init --parseDependency --parseInternal` to update swaggo details
+0. `go build .\migrate\; go run .\migrate\` to migrate (update table schema) of our model files to the database
+1. `CompileDaemon -command="./ChAMP-Backend-Final-Project"` to make CompileDaemon report to terminal in realtime OR use `go build .\main.go; go run .\main.go` to run the server / run main system
+2. `swag init --parseDependency --parseInternal` to update swaggo details
 
 ### Tips I learned
 
