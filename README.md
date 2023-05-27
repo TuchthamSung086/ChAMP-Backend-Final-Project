@@ -55,6 +55,11 @@ go install github.com/swaggo/swag/cmd/swag
 1. `CompileDaemon -command="./ChAMP-Backend-Final-Project"` to make CompileDaemon report to terminal in realtime OR use `go build .\main.go; go run .\main.go` to run the server / run main system
 2. `swag init --parseDependency --parseInternal` to update swaggo details
 
+### Testing
+
+1. cd in terminal to `\ChAMP-Backend-Final-Project\database`
+2. `go test` and wait for results
+
 ### Tips I learned
 
 1. Please use GORM's logger and set the mode to "info" there're info, warn, error, silent.
