@@ -41,7 +41,7 @@ func (ls *listService) listsToControllerLists(lists []models.List) []*models.Con
 	return controllerLists
 }
 
-func (ls *listService) listFixOrderRange(order int) int {
+func (ls *listService) fixListOrderRange(order int) int {
 	// Fix range
 	if order < 0 {
 		return 1

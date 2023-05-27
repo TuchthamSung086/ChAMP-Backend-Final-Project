@@ -74,7 +74,7 @@ func (ls *listService) GetById(id uint) (*models.ControllerList, error) {
 
 func (ls *listService) Update(id uint, updateBody *models.ControllerList) (*models.ControllerList, error) {
 	db := ls.db
-	updateBody.Order = ls.listFixOrderRange(updateBody.Order)
+	updateBody.Order = ls.fixListOrderRange(updateBody.Order)
 	var list *models.List
 	db.Preload(clause.Associations).First(&list, id)
 

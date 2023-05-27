@@ -45,7 +45,7 @@ func (ts *taskService) tasksToControllerTasks(tasks []models.Task) []*models.Con
 	return controllerTasks
 }
 
-func (ts *taskService) taskFixOrderRange(order int, listID int) int {
+func (ts *taskService) fixTaskOrderRange(order int, listID int) int {
 	// Fix range
 	if order < 0 {
 		return 1
@@ -55,11 +55,11 @@ func (ts *taskService) taskFixOrderRange(order int, listID int) int {
 	return order
 }
 
-func (ts *taskService) changeList(task models.Task, listID uint) {
+func (ts *taskService) changeList(task *models.Task, listID uint) {
 	// Fix Order after our task in old list
 	ts.db.Model(&models.Task{}).Where(`list_id = ? AND "order" > ?`, task.ListID, task.Order).Update(`"order"`, gorm.Expr(`"order" - 1`))
 	// Put to the last Order of new list
-	ts.db.Model(&task).Updates(models.Task{
+	ts.db.Model(task).Updates(models.Task{
 		Order:  ts.getLatestTaskOrder(int(listID)) + 1,
 		ListID: listID,
 	})

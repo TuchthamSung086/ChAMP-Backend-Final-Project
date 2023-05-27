@@ -14,7 +14,7 @@ type TaskService interface {
 	Create(list *models.ControllerTask) (*models.ControllerTask, error)
 	GetAll() ([]*models.ControllerTask, error)
 	GetById(id uint) (*models.ControllerTask, error)
-	// Update(id uint, updateBody *models.ControllerTask) (*models.ControllerTask, error)
+	Update(id uint, updateBody *models.ControllerTask) (*models.ControllerTask, error)
 	// Delete(id uint) (*models.ControllerTask, error)
 	// DeleteAll() error
 }
@@ -36,7 +36,7 @@ func (ts *taskService) Create(task *models.ControllerTask) (*models.ControllerTa
 	dbTask := ts.controllerTaskToTask(task)
 
 	// Create a Task at the end of list (last order)
-	dbTask.Order = ts.getLatestTaskOrder(int(dbTask.ListID))
+	dbTask.Order = ts.getLatestTaskOrder(int(dbTask.ListID)) + 1
 	result := ts.db.Preload(clause.Associations).Create(dbTask) // pass pointer of data to Create
 	if result.Error != nil {
 		return nil, result.Error
@@ -44,7 +44,7 @@ func (ts *taskService) Create(task *models.ControllerTask) (*models.ControllerTa
 
 	// Fix new Order to be in possible range
 	// Then, Update if change order
-	ts.taskReorder(dbTask, ts.taskFixOrderRange(task.Order, int(task.ListID)))
+	ts.taskReorder(dbTask, ts.fixTaskOrderRange(task.Order, int(task.ListID)))
 
 	return ts.taskToControllerTask(dbTask), nil
 }
@@ -68,4 +68,34 @@ func (ts *taskService) GetById(id uint) (*models.ControllerTask, error) {
 		return nil, result.Error
 	}
 	return ts.taskToControllerTask(&task), nil
+}
+
+func (ts *taskService) Update(id uint, updateBody *models.ControllerTask) (*models.ControllerTask, error) {
+	// Get Task to Update
+	var task *models.Task
+	ts.db.Preload(clause.Associations).First(&task, id)
+
+	// Update if change list
+	if updateBody.ListID != 0 && task.ListID != updateBody.ListID {
+		ts.changeList(task, updateBody.ListID)
+	}
+
+	// Fix order to be in possible range
+	updateBody.Order = ts.fixTaskOrderRange(updateBody.Order, int(task.ListID))
+
+	// Update if change order
+	ts.taskReorder(task, updateBody.Order)
+
+	// Update basic info
+	result := ts.db.Model(task).Updates(models.Task{
+		Title:       updateBody.Title,
+		Description: updateBody.Description,
+		DueDate:     updateBody.DueDate,
+	})
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return ts.taskToControllerTask(task), nil
 }

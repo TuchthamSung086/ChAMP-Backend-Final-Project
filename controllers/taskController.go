@@ -110,7 +110,6 @@ func (tc *TaskController) GetById(c *gin.Context) {
 
 }
 
-/*
 // @Summary Update task by id
 // @Schemes
 // @Description Update task with id. Fields [Title, Order, ListID] can be updated. Changing the order will affect other tasks too, just like inserting in c++ vector. Changing list without specifying Order will put it in the last order.
@@ -121,42 +120,28 @@ func (tc *TaskController) GetById(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.SwaggerTask
 // @Router /task/{id} [put]
-func TaskUpdate(c *gin.Context) {
+func (tc *TaskController) Update(c *gin.Context) {
 	// Find task with id
 	id := c.Param("id")
-	var task models.Task
-	initializers.DB.First(&task, id)
+	taskId, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	// Get data from req body
-	var body struct {
-		models.Task
-	}
+	body := &models.ControllerTask{}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Update if change list
-	if body.ListID != 0 && task.ListID != body.ListID {
-		logic.ChangeList(task, body.ListID)
+	task, err := tc.ts.Update(uint(taskId), body)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
-
-	// Fix range
-	if body.Order < 0 {
-		body.Order = 1
-	} else if x := utils.GetLatestTaskOrder(int(task.ListID)); body.Order > x {
-		body.Order = x
-	}
-
-	// Update if change order
-	logic.TaskReorder(task, body.Order)
-
-	// Update basic info
-	initializers.DB.Model(&task).Updates(models.Task{
-		Title:       body.Title,
-		Description: body.Description,
-		DueDate:     body.DueDate,
-	})
 
 	// Return
 	c.JSON(200, gin.H{
@@ -164,6 +149,7 @@ func TaskUpdate(c *gin.Context) {
 	})
 }
 
+/*
 // @Summary Delete task by id
 // @Schemes
 // @Description Delete task with id. The orders of other tasks will be updated.
