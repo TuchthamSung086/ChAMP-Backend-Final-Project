@@ -22,6 +22,7 @@ You can use the exact database service, I am not planning to close it soon.
 4. Swagger: api documentation https://github.com/swaggo/swag/blob/master/README.md#declarative-comments-format
 5. PostgreSQL: database (use eleplantSQL)
 6. TablePlus: database management tool
+7. Postman: URL Request Testing (POSTMAN json in the main directory)
 
 ### Initial Setup
 
