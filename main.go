@@ -18,11 +18,11 @@ func main() {
 		panic("Can't connect to database")
 	}
 
-	// Create the services
+	// Create the services (Interface)
 	listService := database.NewListService(db)
 	taskService := database.NewTaskService(db)
 
-	// Create the controllers
+	// Create the controllers (Controller Object)
 	listController := controllers.NewListController(listService)
 	taskController := controllers.NewTaskController(taskService)
 

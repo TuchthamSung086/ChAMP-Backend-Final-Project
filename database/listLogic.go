@@ -15,12 +15,50 @@ func (ls *listService) getLatestListOrder() int {
 	return 0
 }
 
+func (ls *listService) taskToControllerTask(task *models.Task) *models.ControllerTask {
+	return &models.ControllerTask{
+		ID:          task.Model.ID,
+		Title:       task.Title,
+		Order:       task.Order,
+		ListID:      task.ListID,
+		Description: task.Description,
+		DueDate:     task.DueDate,
+	}
+}
+
+func (ls *listService) tasksToControllerTasks(tasks []*models.Task) []*models.ControllerTask {
+	var controllerTasks = []*models.ControllerTask{}
+	for _, task := range tasks {
+		controllerTasks = append(controllerTasks, ls.taskToControllerTask(task))
+	}
+	return controllerTasks
+}
+
+func (ls *listService) controllerTaskToTask(task *models.ControllerTask) *models.Task {
+	return &models.Task{
+		Model:       gorm.Model{ID: task.ID},
+		Title:       task.Title,
+		Order:       task.Order,
+		ListID:      task.ListID,
+		Description: task.Description,
+		DueDate:     task.DueDate,
+	}
+}
+
+func (ls *listService) controllerTasksToTasks(controllerTasks []*models.ControllerTask) []*models.Task {
+	var tasks = []*models.Task{}
+	for _, controllerTask := range controllerTasks {
+		tasks = append(tasks, ls.controllerTaskToTask(controllerTask))
+	}
+	return tasks
+}
+
 func (ls *listService) controllerListToList(list *models.ControllerList) *models.List {
 	return &models.List{
 		Model: gorm.Model{ID: list.ID},
 		Title: list.Title,
 		Order: list.Order,
-		Tasks: list.Tasks,
+		Tasks: ls.controllerTasksToTasks(list.Tasks),
 	}
 }
 
@@ -29,7 +67,7 @@ func (ls *listService) listToControllerList(list *models.List) *models.Controlle
 		ID:    list.ID,
 		Title: list.Title,
 		Order: list.Order,
-		Tasks: list.Tasks,
+		Tasks: ls.tasksToControllerTasks(list.Tasks),
 	}
 }
 

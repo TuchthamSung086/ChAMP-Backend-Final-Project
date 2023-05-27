@@ -33,9 +33,11 @@ type ControllerTask struct {
 }
 
 type SwaggerInputCreateTask struct {
-	Title       string `gorm:"not null;size:255;default:Untitled;" json:"Title"`
-	Description string `gorm:"size:255" json:"Description"`
-	ListID      uint   `gorm:"not null;"  json:"ListID"`
+	Title       string    `gorm:"not null;size:255;default:Untitled;" json:"Title"`
+	Description string    `gorm:"size:255" json:"Description"`
+	ListID      uint      `gorm:"not null;"  json:"ListID"`
+	DueDate     time.Time `json:"DueDate"`
+	Order       int
 }
 
 type SwaggerInputUpdateTask struct {
