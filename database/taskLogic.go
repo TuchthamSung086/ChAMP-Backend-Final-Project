@@ -37,6 +37,14 @@ func (ts *taskService) taskToControllerTask(task *models.Task) *models.Controlle
 	}
 }
 
+func (ts *taskService) tasksToControllerTasks(tasks []models.Task) []*models.ControllerTask {
+	var controllerTasks = []*models.ControllerTask{}
+	for _, task := range tasks {
+		controllerTasks = append(controllerTasks, ts.taskToControllerTask(&task))
+	}
+	return controllerTasks
+}
+
 func (ts *taskService) taskFixOrderRange(order int, listID int) int {
 	// Fix range
 	if order < 0 {

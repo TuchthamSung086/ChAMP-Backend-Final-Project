@@ -50,7 +50,6 @@ func (tc *TaskController) Create(c *gin.Context) {
 	})
 }
 
-/*
 // @Summary Get All Tasks in database
 // @Schemes
 // @Description Get All Tasks in database
@@ -59,17 +58,23 @@ func (tc *TaskController) Create(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.SwaggerTasks
 // @Router /tasks [get]
-func TaskGetAll(c *gin.Context) {
+func (tc *TaskController) GetAll(c *gin.Context) {
 	// Get all records
-	var tasks []models.Task
-	initializers.DB.Find(&tasks)
+	tasks, err := tc.ts.GetAll()
 
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 	// Return
 	c.JSON(200, gin.H{
 		"tasks": tasks,
 	})
 }
 
+/*
 // @Summary Get Task By ID
 // @Schemes
 // @Description Get a task by id

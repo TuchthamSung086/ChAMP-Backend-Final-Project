@@ -12,7 +12,7 @@ import (
 // Define all services this interface provides, the controller can call these functions only
 type TaskService interface {
 	Create(list *models.ControllerTask) (*models.ControllerTask, error)
-	// GetAll() ([]*models.ControllerTask, error)
+	GetAll() ([]*models.ControllerTask, error)
 	// GetById(id uint) (*models.ControllerTask, error)
 	// Update(id uint, updateBody *models.ControllerTask) (*models.ControllerTask, error)
 	// Delete(id uint) (*models.ControllerTask, error)
@@ -47,4 +47,16 @@ func (ts *taskService) Create(task *models.ControllerTask) (*models.ControllerTa
 	ts.taskReorder(dbTask, ts.taskFixOrderRange(task.Order, int(task.ListID)))
 
 	return ts.taskToControllerTask(dbTask), nil
+}
+
+func (ts *taskService) GetAll() ([]*models.ControllerTask, error) {
+	// Get all records
+	var tasks []models.Task
+	result := ts.db.Preload(clause.Associations).Find(&tasks)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return ts.tasksToControllerTasks(tasks), nil
 }

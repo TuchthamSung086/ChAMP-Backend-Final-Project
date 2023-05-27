@@ -47,4 +47,5 @@ func SetListControllerRoutes(r *gin.Engine, lc *controllers.ListController) {
 // r here is router
 func SetTaskControllerRoutes(r *gin.Engine, tc *controllers.TaskController) {
 	r.POST("/task", tc.Create)
+	r.GET("/tasks", tc.GetAll)
 }
