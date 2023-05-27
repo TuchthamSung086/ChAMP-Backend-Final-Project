@@ -43,3 +43,8 @@ func SetListControllerRoutes(r *gin.Engine, lc *controllers.ListController) {
 	r.PUT("/list/:id", lc.Update)
 	r.DELETE("/list/:id", lc.Delete)
 }
+
+// r here is router
+func SetTaskControllerRoutes(r *gin.Engine, tc *controllers.TaskController) {
+	r.POST("/task", tc.Create)
+}

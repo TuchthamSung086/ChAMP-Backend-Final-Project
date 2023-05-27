@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// INTERFACE FACTORY
+// ***** INTERFACE FACTORY *****
 
 // Define all services this interface provides, the controller can call these functions only
 type ListService interface {
@@ -30,13 +30,13 @@ func NewListService(db *gorm.DB) ListService {
 	return &listService{db: db}
 }
 
-// SERVICES AND FUNCTIONS
+// ***** SERVICES AND FUNCTIONS *****
 func (ls *listService) Create(list *models.ControllerList) (*models.ControllerList, error) {
 	db := ls.db
 	dbList := ls.controllerListToList(list)
 	// Fix Order
 	if dbList.Order == 0 {
-		dbList.Order = ls.listGetLatestOrder() + 1
+		dbList.Order = ls.getLatestListOrder() + 1
 	}
 
 	result := db.Preload(clause.Associations).Create(dbList) // pass pointer of data to Create
@@ -105,7 +105,7 @@ func (ls *listService) Delete(id uint) (*models.ControllerList, error) {
 	db.Delete(&models.Task{}, "list_id = ?", id)
 
 	// Decrease order of lists after this list
-	db.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, list.Order+1, ls.listGetLatestOrder()).Update(`"order"`, gorm.Expr(`"order" - 1`))
+	db.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, list.Order+1, ls.getLatestListOrder()).Update(`"order"`, gorm.Expr(`"order" - 1`))
 
 	// Save value to return deleted list
 	deletedList := ls.listToControllerList(&list)

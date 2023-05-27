@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (ls *listService) listGetLatestOrder() int {
+func (ls *listService) getLatestListOrder() int {
 	var res models.List
 	ls.db.Model(&models.List{}).Order(`"order" desc`).Limit(1).Find(&res)
 	if res.Order >= 1 {
@@ -45,7 +45,7 @@ func (ls *listService) listFixOrderRange(order int) int {
 	// Fix range
 	if order < 0 {
 		return 1
-	} else if x := ls.listGetLatestOrder(); order > x {
+	} else if x := ls.getLatestListOrder(); order > x {
 		return x
 	}
 	return order

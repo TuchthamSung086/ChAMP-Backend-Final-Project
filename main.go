@@ -20,14 +20,18 @@ func main() {
 
 	// Create the services
 	listService := database.NewListService(db)
+	taskService := database.NewTaskService(db)
 
 	// Create the controllers
 	listController := controllers.NewListController(listService)
+	taskController := controllers.NewTaskController(taskService)
 
 	// Setup router
 	r := routes.SetupRouter()
 
 	// Match controllers to routes
 	routes.SetListControllerRoutes(r, &listController)
+	routes.SetTaskControllerRoutes(r, &taskController)
+
 	r.Run() // listen and serve on localhost:PORT
 }

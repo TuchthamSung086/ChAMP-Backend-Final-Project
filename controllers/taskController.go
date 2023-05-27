@@ -1,17 +1,23 @@
 package controllers
 
-/*
 import (
-	"ChAMP-Backend-Final-Project/initializers"
-	"ChAMP-Backend-Final-Project/logic"
+	"ChAMP-Backend-Final-Project/database"
 	"ChAMP-Backend-Final-Project/models"
-	"ChAMP-Backend-Final-Project/utils"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
+
+// FACTORY
+type TaskController struct {
+	ts database.TaskService
+}
+
+// Receive real interface (not pointer)
+// Return real controller object struct (not pointer)
+func NewTaskController(ts database.TaskService) TaskController {
+	return TaskController{ts: ts}
+}
 
 // @Summary Create a Task
 // @Schemes
@@ -22,43 +28,29 @@ import (
 // @Param task body models.SwaggerInputCreateTask true "Details of this Task"
 // @Success 200 {object} models.SwaggerTask
 // @Router /task [post]
-func TaskCreate(c *gin.Context) {
+func (tc *TaskController) Create(c *gin.Context) {
 	// Get data off request body
-	var body struct {
-		models.Task
-	}
+	body := &models.ControllerTask{}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Create a Task
-	task := models.Task{Title: body.Title, Description: body.Description, DueDate: body.DueDate, Order: utils.GetLatestTaskOrder(int(body.ListID)) + 1, ListID: body.ListID}
+	// Create Task
+	task, err := tc.ts.Create(body)
 
-	// Fix range
-	if body.Order < 0 {
-		body.Order = 1
-	} else if x := utils.GetLatestTaskOrder(int(task.ListID)); body.Order > x {
-		body.Order = x
-	}
-
-	// Update if change order
-	logic.TaskReorder(task, body.Order)
-
-	result := initializers.DB.Create(&task) // pass pointer of data to Create
-
-	if result.Error != nil {
+	if err != nil {
 		//c.Status(400)
-		c.JSON(400, gin.H{"msg": result.Error})
+		c.JSON(400, gin.H{"msg": err.Error()})
 		return
 	}
 	// Return
 	c.JSON(201, gin.H{
-		"task":          task,
-		"rows affected": result.RowsAffected,
+		"task": task,
 	})
 }
 
+/*
 // @Summary Get All Tasks in database
 // @Schemes
 // @Description Get All Tasks in database

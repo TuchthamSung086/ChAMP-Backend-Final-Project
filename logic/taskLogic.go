@@ -45,5 +45,4 @@ func TaskReorder(task models.Task, to int) {
 	} else if to != 0 && to > task.Order {
 		taskMoveToBack(task, to)
 	}
-}
-*/
+} */
