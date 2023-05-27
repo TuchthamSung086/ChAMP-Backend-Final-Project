@@ -37,9 +37,9 @@ func SetupRouter() *gin.Engine {
 
 // r here is router
 func SetListControllerRoutes(r *gin.Engine, lc *controllers.ListController) {
-	r.POST("/list", lc.ListCreate)
-	r.GET("/lists", lc.ListGetAll)
-	r.GET("/list/:id", lc.ListGet)
-	r.PUT("/list/:id", lc.ListUpdate)
-	r.DELETE("/list/:id", lc.ListDelete)
+	r.POST("/list", lc.Create)
+	r.GET("/lists", lc.GetAll)
+	r.GET("/list/:id", lc.Get)
+	r.PUT("/list/:id", lc.Update)
+	r.DELETE("/list/:id", lc.Delete)
 }

@@ -11,12 +11,12 @@ import (
 
 // Define all services this interface provides, the controller can call these functions only
 type ListService interface {
-	ListCreate(list *models.ControllerList) (*models.ControllerList, error)
-	ListGetAll() ([]*models.ControllerList, error)
-	ListGetById(id uint) (*models.ControllerList, error)
-	ListUpdate(id uint, updateBody *models.ControllerList) (*models.ControllerList, error)
-	ListDelete(id uint) (*models.ControllerList, error)
-	ListDeleteAll() error
+	Create(list *models.ControllerList) (*models.ControllerList, error)
+	GetAll() ([]*models.ControllerList, error)
+	GetById(id uint) (*models.ControllerList, error)
+	Update(id uint, updateBody *models.ControllerList) (*models.ControllerList, error)
+	Delete(id uint) (*models.ControllerList, error)
+	DeleteAll() error
 }
 
 // Our structure, stores DB
@@ -31,7 +31,7 @@ func NewListService(db *gorm.DB) ListService {
 }
 
 // SERVICES AND FUNCTIONS
-func (ls *listService) ListCreate(list *models.ControllerList) (*models.ControllerList, error) {
+func (ls *listService) Create(list *models.ControllerList) (*models.ControllerList, error) {
 	db := ls.db
 	dbList := ls.controllerListToList(list)
 	// Fix Order
@@ -50,7 +50,7 @@ func (ls *listService) ListCreate(list *models.ControllerList) (*models.Controll
 	return ls.listToControllerList(dbList), nil
 }
 
-func (ls *listService) ListGetAll() ([]*models.ControllerList, error) {
+func (ls *listService) GetAll() ([]*models.ControllerList, error) {
 	db := ls.db
 	var lists []models.List
 	result := db.Preload(clause.Associations).Find(&lists)
@@ -62,7 +62,7 @@ func (ls *listService) ListGetAll() ([]*models.ControllerList, error) {
 	return ls.listsToControllerLists(lists), nil
 }
 
-func (ls *listService) ListGetById(id uint) (*models.ControllerList, error) {
+func (ls *listService) GetById(id uint) (*models.ControllerList, error) {
 	db := ls.db
 	var list models.List
 	result := db.Preload(clause.Associations).First(&list, id)
@@ -72,7 +72,7 @@ func (ls *listService) ListGetById(id uint) (*models.ControllerList, error) {
 	return ls.listToControllerList(&list), nil
 }
 
-func (ls *listService) ListUpdate(id uint, updateBody *models.ControllerList) (*models.ControllerList, error) {
+func (ls *listService) Update(id uint, updateBody *models.ControllerList) (*models.ControllerList, error) {
 	db := ls.db
 	updateBody.Order = ls.listFixOrderRange(updateBody.Order)
 	var list *models.List
@@ -93,7 +93,7 @@ func (ls *listService) ListUpdate(id uint, updateBody *models.ControllerList) (*
 	return ls.listToControllerList(list), nil
 }
 
-func (ls *listService) ListDelete(id uint) (*models.ControllerList, error) {
+func (ls *listService) Delete(id uint) (*models.ControllerList, error) {
 	// Declare DB
 	db := ls.db
 
@@ -120,7 +120,7 @@ func (ls *listService) ListDelete(id uint) (*models.ControllerList, error) {
 }
 
 // Hard Delete for testing
-func (ls *listService) ListDeleteAll() error {
+func (ls *listService) DeleteAll() error {
 	// Delete
 	result := ls.db.Unscoped().Delete(&models.List{}, "Title LIKE ?", "%")
 	if result.Error != nil {
