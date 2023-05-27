@@ -35,7 +35,7 @@ You can use the exact database service, I am not planning to close it soon.
 
 Note: https://coderwall.com/p/arxtja/install-all-go-project-dependencies-in-one-command
 
-Change directory into the project and simply run`go get ./...` to install all dependencies of a Golang project or golang projects recursively
+Change directory into the project and simply run `go get ./...` to install all dependencies of a Golang project or golang projects recursively
 
 ```
 go get -u github.com/swaggo/swag
