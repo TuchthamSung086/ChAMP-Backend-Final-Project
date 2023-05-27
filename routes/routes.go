@@ -21,12 +21,6 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 
-	// r.POST("/task", controllers.TaskCreate)
-	// r.GET("/tasks", controllers.TaskGetAll)
-	// r.GET("/task/:id", controllers.TaskGet)
-	// r.PUT("/task/:id", controllers.TaskUpdate)
-	// r.DELETE("/task/:id", controllers.TaskDelete)
-
 	// r.DELETE("/dev/clearDB", controllers.ClearDatabase)
 
 	docs.SwaggerInfo.BasePath = "/"
@@ -42,6 +36,7 @@ func SetListControllerRoutes(r *gin.Engine, lc *controllers.ListController) {
 	r.GET("/list/:id", lc.Get)
 	r.PUT("/list/:id", lc.Update)
 	r.DELETE("/list/:id", lc.Delete)
+	r.DELETE("/dev/deleteAllList", lc.DeleteAll)
 }
 
 // r here is router
@@ -51,4 +46,5 @@ func SetTaskControllerRoutes(r *gin.Engine, tc *controllers.TaskController) {
 	r.GET("/task/:id", tc.GetById)
 	r.PUT("/task/:id", tc.Update)
 	r.DELETE("/task/:id", tc.Delete)
+	r.DELETE("/dev/deleteAllTask", tc.DeleteAll)
 }

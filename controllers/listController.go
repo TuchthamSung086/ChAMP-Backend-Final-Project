@@ -176,8 +176,12 @@ func (lc *ListController) Delete(c *gin.Context) {
 // Hard Delete for testing
 func (lc *ListController) DeleteAll(c *gin.Context) {
 	// Delete
-	lc.ls.DeleteAll()
+	rowsDeleted, err := lc.ls.DeleteAll()
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Return
-	c.Status(200)
+	c.JSON(200, gin.H{"Rows Deleted": rowsDeleted})
 }

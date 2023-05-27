@@ -16,7 +16,7 @@ type ListService interface {
 	GetById(id uint) (*models.ControllerList, error)
 	Update(id uint, updateBody *models.ControllerList) (*models.ControllerList, error)
 	Delete(id uint) (*models.ControllerList, error)
-	DeleteAll() error
+	DeleteAll() (int, error)
 }
 
 // Our structure, stores DB
@@ -120,11 +120,11 @@ func (ls *listService) Delete(id uint) (*models.ControllerList, error) {
 }
 
 // Hard Delete for testing
-func (ls *listService) DeleteAll() error {
+func (ls *listService) DeleteAll() (int, error) {
 	// Delete
 	result := ls.db.Unscoped().Delete(&models.List{}, "Title LIKE ?", "%")
 	if result.Error != nil {
-		return result.Error
+		return 0, result.Error
 	}
-	return nil
+	return int(result.RowsAffected), nil
 }

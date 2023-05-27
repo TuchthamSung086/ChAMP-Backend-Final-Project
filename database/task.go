@@ -16,7 +16,7 @@ type TaskService interface {
 	GetById(id uint) (*models.ControllerTask, error)
 	Update(id uint, updateBody *models.ControllerTask) (*models.ControllerTask, error)
 	Delete(id uint) (*models.ControllerTask, error)
-	// DeleteAll() error
+	DeleteAll() (int, error)
 }
 
 // Our structure, stores DB
@@ -118,4 +118,14 @@ func (ts *taskService) Delete(id uint) (*models.ControllerTask, error) {
 	}
 
 	return deletedTask, nil
+}
+
+// Hard Delete for testing
+func (ts *taskService) DeleteAll() (int, error) {
+	// Delete
+	result := ts.db.Unscoped().Delete(&models.Task{}, "Title LIKE ?", "%")
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return int(result.RowsAffected), nil
 }

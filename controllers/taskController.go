@@ -176,7 +176,22 @@ func (tc *TaskController) Delete(c *gin.Context) {
 	c.JSON(200, gin.H{"deletedTask": deletedTask})
 }
 
+// Hard Delete for testing
+func (tc *TaskController) DeleteAll(c *gin.Context) {
+
+	// Delete all records from the "tasks" table
+	rowsDeleted, err := tc.ts.DeleteAll()
+	if err != nil {
+		fmt.Println("Failed to delete records:", err.Error())
+		return
+	}
+
+	// Return
+	c.JSON(200, gin.H{"Rows Deleted": rowsDeleted})
+}
+
 /*
+
 // Restore deleted task
 func TaskRestore(c *gin.Context) {
 	// Find task with id
@@ -189,20 +204,4 @@ func TaskRestore(c *gin.Context) {
 	c.Status(200)
 }
 
-// Hard Delete for testing
-func TaskDeleteAll(c *gin.Context) {
-
-	// Delete all records from the "tasks" table
-	result := initializers.DB.Unscoped().Delete(&models.Task{}, "Title LIKE ?", "%")
-	if result.Error != nil {
-		fmt.Println("Failed to delete records:", result.Error)
-		return
-	}
-
-	// Print the number of deleted records
-	fmt.Println("Number of deleted records:", result.RowsAffected)
-
-	// Return
-	c.Status(200)
-}
 */
