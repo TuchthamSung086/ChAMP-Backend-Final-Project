@@ -9,8 +9,6 @@ import (
 
 func init() {
 	initializers.LoadEnvVariables()
-
-	database.ConnectToDB()
 }
 
 func main() {

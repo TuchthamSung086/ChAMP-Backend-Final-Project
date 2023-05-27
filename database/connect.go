@@ -1,6 +1,6 @@
 package database
 
-import (
+/* import (
 	"log"
 	"os"
 	"time"
@@ -34,3 +34,4 @@ func ConnectToDB() {
 		log.Fatal("Failed to connect to database")
 	}
 }
+*/

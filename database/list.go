@@ -33,10 +33,10 @@ func NewListService(db *gorm.DB) ListService {
 // SERVICES AND FUNCTIONS
 func (ls *listService) ListCreate(list *models.ControllerList) (*models.ControllerList, error) {
 	db := ls.db
-	dbList := controllerListToList(list)
+	dbList := ls.controllerListToList(list)
 	// Fix Order
 	if dbList.Order == 0 {
-		dbList.Order = listGetLatestOrder(ls.db) + 1
+		dbList.Order = ls.listGetLatestOrder() + 1
 	}
 
 	result := db.Preload(clause.Associations).Create(dbList) // pass pointer of data to Create
@@ -47,7 +47,7 @@ func (ls *listService) ListCreate(list *models.ControllerList) (*models.Controll
 	}
 
 	// continue happy path
-	return listToControllerList(dbList), nil
+	return ls.listToControllerList(dbList), nil
 }
 
 func (ls *listService) ListGetAll() ([]*models.ControllerList, error) {
@@ -59,7 +59,7 @@ func (ls *listService) ListGetAll() ([]*models.ControllerList, error) {
 		return nil, result.Error
 	}
 
-	return listsToControllerLists(lists), nil
+	return ls.listsToControllerLists(lists), nil
 }
 
 func (ls *listService) ListGetById(id uint) (*models.ControllerList, error) {
@@ -69,17 +69,17 @@ func (ls *listService) ListGetById(id uint) (*models.ControllerList, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return listToControllerList(&list), nil
+	return ls.listToControllerList(&list), nil
 }
 
 func (ls *listService) ListUpdate(id uint, updateBody *models.ControllerList) (*models.ControllerList, error) {
 	db := ls.db
-	updateBody.Order = listFixOrderRange(updateBody.Order, ls.db)
+	updateBody.Order = ls.listFixOrderRange(updateBody.Order)
 	var list *models.List
 	db.Preload(clause.Associations).First(&list, id)
 
 	// Update if change order
-	listReorder(list, updateBody.Order)
+	ls.listReorder(list, updateBody.Order)
 
 	// Update basic info
 	result := db.Model(list).Updates(models.List{
@@ -90,7 +90,7 @@ func (ls *listService) ListUpdate(id uint, updateBody *models.ControllerList) (*
 		return nil, result.Error
 	}
 
-	return listToControllerList(list), nil
+	return ls.listToControllerList(list), nil
 }
 
 func (ls *listService) ListDelete(id uint) (*models.ControllerList, error) {
@@ -105,10 +105,10 @@ func (ls *listService) ListDelete(id uint) (*models.ControllerList, error) {
 	db.Delete(&models.Task{}, "list_id = ?", id)
 
 	// Decrease order of lists after this list
-	db.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, list.Order+1, listGetLatestOrder(ls.db)).Update(`"order"`, gorm.Expr(`"order" - 1`))
+	db.Model(&models.List{}).Where(`"order" BETWEEN ? AND ?`, list.Order+1, ls.listGetLatestOrder()).Update(`"order"`, gorm.Expr(`"order" - 1`))
 
 	// Save value to return deleted list
-	deletedList := listToControllerList(&list)
+	deletedList := ls.listToControllerList(&list)
 
 	// Delete the list
 	result := db.Delete(&models.List{}, id)
