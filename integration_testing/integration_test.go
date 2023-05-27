@@ -1,4 +1,4 @@
-package main_test
+package testing
 
 import (
 	"ChAMP-Backend-Final-Project/initializers"
